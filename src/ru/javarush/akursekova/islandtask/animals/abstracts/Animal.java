@@ -1,6 +1,6 @@
 package ru.javarush.akursekova.islandtask.animals.abstracts;
-//import ru.javarush.akursekova.islandtask.Island;
-//import ru.javarush.akursekova.islandtask.RandomNumberGenerator;
+import ru.javarush.akursekova.islandtask.Island;
+import ru.javarush.akursekova.islandtask.RandomNumberGenerator;
 
 import java.text.DecimalFormat;
 import java.util.Map;
@@ -55,18 +55,18 @@ public abstract class Animal {
         return foodAndProbability.get(clazz);
     }
 
-//    public int[] generateDirectionsToMove() {
-//        int[] directionsToMove = new int[speed];
-//        for (int i = 0; i < directionsToMove.length; i++) {
-//            RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
-//            directionsToMove[i] = randomNumberGenerator.getRandomNumber(1,4);
-//        }
-//        return directionsToMove;
-//    }
+    public int[] generateDirectionsToMove() {
+        int[] directionsToMove = new int[speed];
+        for (int i = 0; i < directionsToMove.length; i++) {
+            RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
+            directionsToMove[i] = randomNumberGenerator.getRandomNumber(1,4);
+        }
+        return directionsToMove;
+    }
 
-//    public void die(Island.Location currentLocation){
-//        currentLocation.removeAnimal(this);
-//    }
+    public void die(Island.Location currentLocation){
+        currentLocation.removeAnimal(this);
+    }
 
     public void reduceFullness(){
         double amountToReduce = maxFullness/4;
