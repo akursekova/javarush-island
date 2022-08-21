@@ -34,25 +34,27 @@ public class ConsoleWriter {
             System.out.println();
         }
     }
+
     public void getIslandStatistics(Island island) {
         System.out.println(NEW_STRING + CURRENT_ISLAND_STATISTICS);
         System.out.println(TOTAL_HERBIVORES_ISLAND + PopulationCounter.getInstance().getHerbivores());
         System.out.println(TOTAL_CARNIVORES_ISLAND + PopulationCounter.getInstance().getCarnivores());
         System.out.println(TOTAL_ANIMALS_ISLAND + PopulationCounter.getInstance().getTotalAnimals());
     }
-    // я не знаю как вытащить значение поля из конструктора класса
-//    public static void getSummaryAnimalsToBeCreated() {
-//        for (Map.Entry entry : ANIMALS_POPULATION_CLASSES.entrySet()) {
-//            Class currentClass = (Class) entry.getKey();
-//            String parentClassName = currentClass.getSuperclass().getSimpleName();
-//            int maxCountOfAnimals = (int) entry.getValue();
-//            if (parentClassName.equals("Carnivore")) {
-//                System.out.println("Will be created " + maxCountOfAnimals + " " + currentClass.getSimpleName() + "s");
-//                //System.out.println(NEW_STRING);
-//            } else {
-//                System.out.println("Will be created " + maxCountOfAnimals + " " + currentClass.getSimpleName() + "s");
-//                //System.out.println(NEW_STRING);
-//            }
-//        }
-//    }
+
+    //method outdated. TBD
+    /*public static void getSummaryAnimalsToBeCreated() {
+        for (Map.Entry entry : ANIMALS_POPULATION_CLASSES.entrySet()) {
+            Class currentClass = (Class) entry.getKey();
+            String parentClassName = currentClass.getSuperclass().getSimpleName();
+            int maxCountOfAnimals = (int) entry.getValue();
+            if (parentClassName.equals("Carnivore")) {
+                System.out.println("Will be created " + maxCountOfAnimals + " " + currentClass.getSimpleName() + "s");
+                //System.out.println(NEW_STRING);
+            } else {
+                System.out.println("Will be created " + maxCountOfAnimals + " " + currentClass.getSimpleName() + "s");
+                //System.out.println(NEW_STRING);
+            }
+        }
+    }*/
 }

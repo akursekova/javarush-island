@@ -12,36 +12,36 @@ public class Island {
     private int width;
     private Location[][] locations;
     Map<Class, Integer> maxAnimalsInLocation = new HashMap<>() {{
-        //put(Bear.class, 5);
-        put(Bear.class, 2);
-//        put(Boa.class, 30);
-        put(Boa.class, 2);
-        //put(Eagle.class, 20);
-        put(Eagle.class, 2);
-        //put(Fox.class, 30);
-        put(Fox.class, 2);
-        //put(Wolf.class, 30);
-        put(Wolf.class, 2);
-        //put(Boar.class, 50);
-        put(Boar.class, 2);
-        //put(Buffalo.class, 10);
-        put(Buffalo.class, 2);
-        //put(Caterpillar.class, 1000);
-        put(Caterpillar.class, 2);
-        //put(Deer.class, 20);
-        put(Deer.class, 2);
-        //put(Duck.class, 200);
-        put(Duck.class, 2);
-        //put(Goat.class, 140);
-        put(Goat.class, 3);
-        //put(Horse.class, 20);
-        put(Horse.class, 2);
-        //put(Mouse.class, 500);
-        put(Mouse.class, 2);
-        //put(Rabbit.class, 150);
-        put(Rabbit.class, 2);
-        //put(Sheep.class, 140);
-        put(Sheep.class, 2);
+        put(Bear.class, 5);
+        //put(Bear.class, 2);
+        put(Boa.class, 30);
+        //put(Boa.class, 2);
+        put(Eagle.class, 20);
+        //put(Eagle.class, 2);
+        put(Fox.class, 30);
+        //put(Fox.class, 2);
+        put(Wolf.class, 30);
+        //put(Wolf.class, 2);
+        put(Boar.class, 50);
+        //put(Boar.class, 2);
+        put(Buffalo.class, 10);
+        //put(Buffalo.class, 2);
+        put(Caterpillar.class, 1000);
+        //put(Caterpillar.class, 2);
+        put(Deer.class, 20);
+        //put(Deer.class, 2);
+        put(Duck.class, 200);
+        //put(Duck.class, 2);
+        put(Goat.class, 140);
+        //put(Goat.class, 3);
+        put(Horse.class, 20);
+        //put(Horse.class, 2);
+        put(Mouse.class, 500);
+        //put(Mouse.class, 2);
+        put(Rabbit.class, 150);
+        //put(Rabbit.class, 2);
+        put(Sheep.class, 140);
+        //put(Sheep.class, 2);
     }};
     public enum Directions {
         LEFT(1),
@@ -73,8 +73,9 @@ public class Island {
                 locations[i][j] = new Location(new Position(i, j));
             }
         }
-        System.out.println("Island with length = " + length + " and width = " + width + " successfully created.");
+        System.out.println("\n" + "Island with length = " + length + " and width = " + width + " successfully created.");
     }
+
     public int getLength() {
         return length;
     }
@@ -163,9 +164,6 @@ public class Island {
         currentLocation.setAmountAnimalsInLocation(animalClass, newAmountAnimalsCurrentLocation);
     }
     public void moveAnimals() {
-        System.out.println(this.getWidth());
-        System.out.println(this.getLength());
-        //учтываю границы с нулами
         for (int i = 1; i < this.getWidth() - 1; i++) {
             for (int j = 1; j < this.getLength() - 1; j++) {
                 Location currentLocation = this.getLocation(i, j);
@@ -200,7 +198,7 @@ public class Island {
                                 if (animalAmountExceedsLimit(locationToMove, currentAnimal)) {
                                     System.out.println("Cannot move: max animals on Location (max = "
                                             + maxAnimalsInLocation.get(currentAnimal.getClass()) + "). " + currentAnimal.emoji()
-                                            + " will remain on the same position: ("
+                                            + " will stay on the same position: ("
                                             + iCurrentPosition + ", " + jCurrentPosition + ").");
                                 } else {
                                     this.changeAnimalPosition(currentLocation, locationToMove, currentAnimal);
@@ -209,6 +207,7 @@ public class Island {
                                             + " from position (" + iCurrentPosition + ", " + jCurrentPosition
                                             + ") to position (" + iFuturePosition + ", " + jFuturePosition + ") ");
                                     jCurrentPosition = jFuturePosition;
+                                    iCurrentPosition = iFuturePosition;
                                     currentLocation = locationToMove;
                                 }
                             } else {
