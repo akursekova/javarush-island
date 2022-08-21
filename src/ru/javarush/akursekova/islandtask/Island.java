@@ -78,12 +78,15 @@ public class Island {
     public int getLength() {
         return length;
     }
+
     public int getWidth() {
         return width;
     }
+
     public Location getLocation(int i, int j) {
         return locations[i][j];
     }
+
     public boolean animalAmountExceedsLimit(Location locationToMove, Animal animal) {
         int maxAnimalsByClassInLocation = this.maxAnimalsInLocation.get(animal.getClass());
         //System.out.println(maxAnimalsByTypeInLocation);
