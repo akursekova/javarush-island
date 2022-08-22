@@ -1,7 +1,11 @@
 package ru.javarush.akursekova.islandtask;
+import ru.javarush.akursekova.islandtask.animals.Viable;
 import ru.javarush.akursekova.islandtask.animals.abstracts.Animal;
+import ru.javarush.akursekova.islandtask.animals.abstracts.Carnivore;
+import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
 import ru.javarush.akursekova.islandtask.animals.carnivore.*;
 import ru.javarush.akursekova.islandtask.animals.herbivore.*;
+import ru.javarush.akursekova.islandtask.animals.plants.Plant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +15,7 @@ public class Island {
     private int length;
     private int width;
     private Location[][] locations;
+    private int maxPlantsInLocations = 200;
     Map<Class, Integer> maxAnimalsInLocation = new HashMap<>() {{
         put(Bear.class, 5);
         //put(Bear.class, 2);
@@ -43,7 +48,7 @@ public class Island {
         put(Sheep.class, 140);
         //put(Sheep.class, 2);
     }};
-    public enum Directions {
+    private enum Directions {
         LEFT(1),
         RIGHT(2),
         UP(3),
@@ -64,6 +69,7 @@ public class Island {
         }
         return null;
     }
+
     public Island(int length, int width) {
         locations = new Location[width][length];
         this.length = length;
@@ -88,6 +94,9 @@ public class Island {
         return locations[i][j];
     }
 
+    public int maxPlantsInLocations() {
+        return maxPlantsInLocations;
+    }
     public boolean animalAmountExceedsLimit(Location locationToMove, Animal animal) {
         int maxAnimalsByClassInLocation = this.maxAnimalsInLocation.get(animal.getClass());
         //System.out.println(maxAnimalsByTypeInLocation);
@@ -224,20 +233,23 @@ public class Island {
             }
         }
     }
+
+
+
     public void feedAnimals() {
         Animal animalReadyToEat;
-        Animal candidateToBeEaten;
         int probabilityToBeEaten;
         for (int i = 1; i < this.getWidth() - 1; i++) {
             for (int j = 1; j < this.getLength() - 1; j++) {
                 Location currentLocation = this.getLocation(i, j);
                 List<Animal> animalsReadyToEat = currentLocation.getAnimalsInLocation();
-                List<Animal> candidatesToBeEaten = currentLocation.getAnimalsInLocation();
+                List<Animal> candidatesToBeEatenByCarnivore = currentLocation.getAnimalsInLocation();
+                List<Viable> candidatesToBeEatenByHerbivore = currentLocation.generateFoodListForHerbivore();
                 //--------------------------//
                 System.out.println("\n" + "current location (" + currentLocation.position.getI() + ","
                         + currentLocation.position.getJ() + ") before to eat:");
-                for (int m = 0; m < candidatesToBeEaten.size(); m++) {
-                    System.out.println(candidatesToBeEaten.get(m));
+                for (int m = 0; m < candidatesToBeEatenByCarnivore.size(); m++) {
+                    System.out.println(candidatesToBeEatenByCarnivore.get(m));
                 }
                 //--------------------------//
                 for (int k = 0; k < animalsReadyToEat.size(); k++) {
@@ -247,31 +259,62 @@ public class Island {
                         continue;
                     }
 
-                    for (int l = candidatesToBeEaten.size() - 1; l >= 0; l--) {
-                        candidateToBeEaten = candidatesToBeEaten.get(l);
-                        Class candidateToBeEatenClass = candidateToBeEaten.getClass();
-                        if (!animalReadyToEat.foodAndProbability().containsKey(candidateToBeEatenClass)) {
-                            continue;
+                    if (animalReadyToEat instanceof Carnivore){
+                        for (int l = candidatesToBeEatenByCarnivore.size() - 1; l >= 0; l--) {
+                            Animal candidateToBeEaten = candidatesToBeEatenByCarnivore.get(l);
+                            Class candidateToBeEatenClass = candidateToBeEaten.getClass();
+                            if (!animalReadyToEat.foodAndProbability().containsKey(candidateToBeEatenClass)) {
+                                continue;
+                            }
+                            probabilityToBeEaten = animalReadyToEat.getProbabilityToBeEaten(candidateToBeEatenClass);
+                            //RandomNumberGenerator generateProbability = new RandomNumberGenerator();
+                            //int randomProbability = generateProbability.getRandomNumber(0, 100);
+                            int randomProbability = probabilityToBeEaten;
+                            if (randomProbability <= probabilityToBeEaten) {
+                                animalReadyToEat.setAte(true);
+                                candidateToBeEaten.die(currentLocation);
+                                System.out.println("\n" + animalReadyToEat + " ate " + candidateToBeEaten
+                                        + " with probability = " + randomProbability);
+                                break;
+                            }
                         }
-                        probabilityToBeEaten = animalReadyToEat.getProbabilityToBeEaten(candidateToBeEatenClass);
-                        //RandomNumberGenerator generateProbability = new RandomNumberGenerator();
-                        //int randomProbability = generateProbability.getRandomNumber(0, 100);
-                        int randomProbability = probabilityToBeEaten;
-                        if (randomProbability <= probabilityToBeEaten) {
-                            animalReadyToEat.setAte(true);
-                            candidateToBeEaten.die(currentLocation);
-                            System.out.println("\n" + animalReadyToEat + " ate " + candidateToBeEaten
-                                    + " with probability = " + randomProbability);
-                            break;
+                    } else {
+                        for (int l = candidatesToBeEatenByHerbivore.size() - 1; l >= 0; l--) {
+                            Viable candidateToBeEaten = candidatesToBeEatenByHerbivore.get(l);
+                            Class candidateToBeEatenClass = candidateToBeEaten.getClass();
+                            if (!animalReadyToEat.foodAndProbability().containsKey(candidateToBeEatenClass)) {
+                                continue;
+                            }
+                            probabilityToBeEaten = animalReadyToEat.getProbabilityToBeEaten(candidateToBeEatenClass);
+                            //RandomNumberGenerator generateProbability = new RandomNumberGenerator();
+                            //int randomProbability = generateProbability.getRandomNumber(0, 100);
+                            int randomProbability = probabilityToBeEaten;
+                            if (randomProbability <= probabilityToBeEaten) {
+                                animalReadyToEat.setAte(true);
+                                if (candidateToBeEaten instanceof Animal){
+                                    ((Animal) candidateToBeEaten).die(currentLocation);
+                                }
+                                if (candidateToBeEaten instanceof Plant){
+                                    ((Plant) candidateToBeEaten).eaten(currentLocation);
+                                }
+
+                                System.out.println("\n" + animalReadyToEat + " ate " + candidateToBeEaten
+                                        + " with probability = " + randomProbability);
+                                break;
+                            }
                         }
                     }
+                    
+
+
                 }
                 //--------------------------//
                 System.out.println("current location(" + currentLocation.position.getI() + ","
                         + currentLocation.position.getJ() + ") after to eat:");
-                for (int m = 0; m < candidatesToBeEaten.size(); m++) {
-                    System.out.println(candidatesToBeEaten.get(m));
+                for (int m = 0; m < candidatesToBeEatenByCarnivore.size(); m++) {
+                    System.out.println(candidatesToBeEatenByCarnivore.get(m));
                 }
+                System.out.println("Left " + currentLocation.plantsInLocation.size() + " plants");
                 //--------------------------//
             }
         }
@@ -297,14 +340,17 @@ public class Island {
         }
         return islandWithBorder;
     }
+
     public class Location {
         private Position position;
         private List<Animal> animalsInLocation;
         private Map<Class, Integer> animalsAmountByClass;
+        private List<Plant> plantsInLocation;
         public Location(Position position) {
             this.position = position;
             animalsInLocation = new ArrayList<>();
             animalsAmountByClass = new HashMap<>();
+            plantsInLocation = new ArrayList<>();
         }
         public Position getPosition() {
             return position;
@@ -312,22 +358,48 @@ public class Island {
         public void setPosition(Position position) {
             this.position = position;
         }
+
         public List<Animal> getAnimalsInLocation() {
             return animalsInLocation;
         }
         public void addAnimal(Animal animal) {
             animalsInLocation.add(animal);
         }
-        public void setAmountAnimalsInLocation(Class classAnimal, int amountAnimals) {
-            animalsAmountByClass.put(classAnimal, amountAnimals);
-        }
         public void removeAnimal(Animal animal) {
             animalsInLocation.remove(animal);
+        }
+        public void removePlant(Plant plant){
+            plantsInLocation.remove(plant);
+        }
+
+        public List<Plant> plantsInLocation() {
+            return plantsInLocation;
+        }
+        public void addPlant(Plant plant) {
+            plantsInLocation.add(plant);
+        }
+
+        public void setAmountAnimalsInLocation(Class classAnimal, int amountAnimals) {
+            animalsAmountByClass.put(classAnimal, amountAnimals);
         }
         public int countAnimalsSameClass(Class clazz) {
             int animalsAmountByClass = this.animalsAmountByClass.get(clazz);
             return animalsAmountByClass;
         }
+        
+        public List<Viable> generateFoodListForHerbivore(){
+            List<Viable> foodListForHerbivore = new ArrayList<>();
+            List<Animal> animalsInLocation = this.getAnimalsInLocation();
+            for (int i = 0; i < animalsInLocation.size(); i++) {
+                if (animalsInLocation.get(i) instanceof Mouse
+                        || animalsInLocation.get(i) instanceof Caterpillar){
+                    foodListForHerbivore.add(animalsInLocation.get(i));
+                }
+            }
+            foodListForHerbivore.addAll(this.plantsInLocation());
+            return foodListForHerbivore;
+        }
+        
         @Override
         public String toString() {
             return "position=" + position;

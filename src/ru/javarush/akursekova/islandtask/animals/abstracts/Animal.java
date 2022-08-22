@@ -1,11 +1,12 @@
 package ru.javarush.akursekova.islandtask.animals.abstracts;
 import ru.javarush.akursekova.islandtask.Island;
 import ru.javarush.akursekova.islandtask.RandomNumberGenerator;
+import ru.javarush.akursekova.islandtask.animals.Viable;
 
 import java.text.DecimalFormat;
 import java.util.Map;
 
-public abstract class Animal {
+public abstract class Animal implements Viable {
     protected double weight;
     protected int speed;
     protected double maxFullness;
@@ -66,6 +67,7 @@ public abstract class Animal {
 
     public void die(Island.Location currentLocation){
         currentLocation.removeAnimal(this);
+        System.out.println("animal deleted from location");
     }
 
     public void reduceFullness(){
