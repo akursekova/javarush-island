@@ -8,7 +8,7 @@ public class Eagle extends Carnivore {
         currentFullness = maxFullness;
         emoji = "\uD83E\uDD85";
         moved = false;
-        ate = false;
+        triedToEat = false;
     }
 
 }

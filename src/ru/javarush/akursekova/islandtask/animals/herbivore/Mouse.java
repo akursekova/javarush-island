@@ -11,7 +11,7 @@ public class Mouse extends Herbivore {
         currentFullness = maxFullness;
         emoji = "\uD83D\uDC2D";
         moved = false;
-        ate = false;
+        triedToEat = false;
 
         foodAndProbability = new HashMap<>(){{
             put(Caterpillar.class, 90);

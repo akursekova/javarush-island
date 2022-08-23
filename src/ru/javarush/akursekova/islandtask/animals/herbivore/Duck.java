@@ -11,7 +11,7 @@ public class Duck extends Herbivore {
         currentFullness = maxFullness;
         emoji = "\uD83E\uDD86";
         moved = false;
-        ate = false;
+        triedToEat = false;
 
         foodAndProbability = new HashMap<>(){{
             put(Caterpillar.class, 90);

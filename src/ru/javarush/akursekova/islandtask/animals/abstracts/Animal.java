@@ -13,7 +13,7 @@ public abstract class Animal implements Viable {
     protected double currentFullness;
     protected String emoji;
     protected boolean moved;
-    protected boolean ate;
+    protected boolean triedToEat;
     protected boolean died;
     protected Map<Class, Integer> foodAndProbability;
 
@@ -26,11 +26,11 @@ public abstract class Animal implements Viable {
     }
 
     public boolean ate() {
-        return ate;
+        return triedToEat;
     }
 
-    public void setAte(boolean ate) {
-        this.ate = ate;
+    public void setTriedToEat(boolean triedToEat) {
+        this.triedToEat = triedToEat;
     }
 
     public String emoji() {
@@ -67,12 +67,16 @@ public abstract class Animal implements Viable {
 
     public void die(Island.Location currentLocation){
         currentLocation.removeAnimal(this);
-        System.out.println("animal deleted from location");
+        System.out.println(this + " deleted from location");
     }
 
     public void reduceFullness(){
         double amountToReduce = maxFullness/4;
         DecimalFormat decimalFormat = new DecimalFormat( "#.###" );
         this.currentFullness = Double.parseDouble(String.valueOf(decimalFormat.format(this.currentFullness - amountToReduce)));
+    }
+
+    public void increaseFullness(Animal eatenAnimal){
+        this.currentFullness += Math.min(eatenAnimal.weight, this.maxFullness - this.currentFullness);
     }
 }

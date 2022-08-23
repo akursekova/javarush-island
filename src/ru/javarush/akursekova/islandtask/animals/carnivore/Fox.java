@@ -8,7 +8,7 @@ public class Fox extends Carnivore {
         currentFullness = maxFullness;
         emoji = "\uD83E\uDD8A";
         moved = false;
-        ate = false;
+        triedToEat = false;
     }
 
 }

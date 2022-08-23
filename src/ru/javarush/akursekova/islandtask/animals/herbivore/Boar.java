@@ -11,7 +11,7 @@ public class Boar extends Herbivore {
         currentFullness = 50;
         emoji = "\uD83D\uDC17";
         moved = false;
-        ate = false;
+        triedToEat = false;
 
         foodAndProbability = new HashMap<>(){{
             put(Mouse.class, 50);

@@ -2,7 +2,6 @@ package ru.javarush.akursekova.islandtask;
 import ru.javarush.akursekova.islandtask.animals.Viable;
 import ru.javarush.akursekova.islandtask.animals.abstracts.Animal;
 import ru.javarush.akursekova.islandtask.animals.abstracts.Carnivore;
-import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
 import ru.javarush.akursekova.islandtask.animals.carnivore.*;
 import ru.javarush.akursekova.islandtask.animals.herbivore.*;
 import ru.javarush.akursekova.islandtask.animals.plants.Plant;
@@ -15,7 +14,8 @@ public class Island {
     private int length;
     private int width;
     private Location[][] locations;
-    private int maxPlantsInLocations = 200;
+//    private int maxPlantsInLocations = 200;
+private int maxPlantsInLocations = 12;
     Map<Class, Integer> maxAnimalsInLocation = new HashMap<>() {{
         put(Bear.class, 5);
         //put(Bear.class, 2);
@@ -25,24 +25,24 @@ public class Island {
         //put(Eagle.class, 2);
         put(Fox.class, 30);
         //put(Fox.class, 2);
-        put(Wolf.class, 30);
-        //put(Wolf.class, 2);
-        put(Boar.class, 50);
-        //put(Boar.class, 2);
+        //put(Wolf.class, 30);
+        put(Wolf.class, 5);
+        //put(Boar.class, 50);
+        put(Boar.class, 2);
         put(Buffalo.class, 10);
         //put(Buffalo.class, 2);
-        put(Caterpillar.class, 1000);
-        //put(Caterpillar.class, 2);
+        //put(Caterpillar.class, 1000);
+        put(Caterpillar.class, 2);
         put(Deer.class, 20);
         //put(Deer.class, 2);
-        put(Duck.class, 200);
-        //put(Duck.class, 2);
-        put(Goat.class, 140);
-        //put(Goat.class, 3);
+        //put(Duck.class, 200);
+        put(Duck.class, 2);
+        //put(Goat.class, 140);
+        put(Goat.class, 3);
         put(Horse.class, 20);
         //put(Horse.class, 2);
-        put(Mouse.class, 500);
-        //put(Mouse.class, 2);
+        //put(Mouse.class, 500);
+        put(Mouse.class, 2);
         put(Rabbit.class, 150);
         //put(Rabbit.class, 2);
         put(Sheep.class, 140);
@@ -161,17 +161,15 @@ public class Island {
         }
         return true;
     }
-    public void changeAnimalPosition(Location currentLocation, Location locationToMove, Animal animal) {
+
+
+    public void actualizeAnimalsAmountInLocation(Location location, Animal animal, int coefficient){
         Class animalClass = animal.getClass();
-        int oldAmountAnimalsLocationToMove = locationToMove.countAnimalsSameClass(animal.getClass());
-        int newAmountAnimalsLocationToMove = oldAmountAnimalsLocationToMove + 1;
-        int oldAmountOfAnimalsCurrentLocation = currentLocation.countAnimalsSameClass(animal.getClass());
-        int newAmountAnimalsCurrentLocation = oldAmountOfAnimalsCurrentLocation - 1;
-        locationToMove.addAnimal(animal);
-        locationToMove.setAmountAnimalsInLocation(animalClass, newAmountAnimalsLocationToMove);
-        currentLocation.removeAnimal(animal);
-        currentLocation.setAmountAnimalsInLocation(animalClass, newAmountAnimalsCurrentLocation);
+        int oldAmountAnimalsLocation = location.countAnimalsSameClass(animal.getClass());
+        int newAmountAnimalsLocation = oldAmountAnimalsLocation + (coefficient) * 1;
+        location.setAmountAnimalsInLocation(animalClass, newAmountAnimalsLocation);
     }
+
     public void moveAnimals() {
         for (int i = 1; i < this.getWidth() - 1; i++) {
             for (int j = 1; j < this.getLength() - 1; j++) {
@@ -210,7 +208,13 @@ public class Island {
                                             + " will stay on the same position: ("
                                             + iCurrentPosition + ", " + jCurrentPosition + ").");
                                 } else {
-                                    this.changeAnimalPosition(currentLocation, locationToMove, currentAnimal);
+                                    //this.changeAnimalPosition(currentLocation, locationToMove, currentAnimal);
+                                    locationToMove.addAnimal(currentAnimal);
+                                    this.actualizeAnimalsAmountInLocation(locationToMove, currentAnimal, 1);
+                                    currentLocation.removeAnimal(currentAnimal);
+                                    this.actualizeAnimalsAmountInLocation(currentLocation, currentAnimal, -1);
+
+
                                     System.out.println(currentAnimal.emoji() + " has been moved "
                                             + getDirectionByNumber(directionsToMove[l])
                                             + " from position (" + iCurrentPosition + ", " + jCurrentPosition
@@ -228,6 +232,7 @@ public class Island {
                     }
                     currentAnimal.setMoved(true);
                     currentAnimal.reduceFullness();
+                    System.out.println("current fullness of " + currentAnimal + "=" + currentAnimal.currentFullness());
                     currentLocation = this.getLocation(i, j);
                 }
             }
@@ -243,23 +248,26 @@ public class Island {
             for (int j = 1; j < this.getLength() - 1; j++) {
                 Location currentLocation = this.getLocation(i, j);
                 List<Animal> animalsReadyToEat = currentLocation.getAnimalsInLocation();
-                List<Animal> candidatesToBeEatenByCarnivore = currentLocation.getAnimalsInLocation();
-                List<Viable> candidatesToBeEatenByHerbivore = currentLocation.generateFoodListForHerbivore();
+                List<Animal> candidatesToBeEatenByCarnivore;
+                List<Viable> candidatesToBeEatenByHerbivore;
+                //List<Animal> candidatesToBeEatenByCarnivore = currentLocation.getAnimalsInLocation();
+                //List<Viable> candidatesToBeEatenByHerbivore = currentLocation.generateFoodListForHerbivore();
                 //--------------------------//
                 System.out.println("\n" + "current location (" + currentLocation.position.getI() + ","
                         + currentLocation.position.getJ() + ") before to eat:");
-                for (int m = 0; m < candidatesToBeEatenByCarnivore.size(); m++) {
-                    System.out.println(candidatesToBeEatenByCarnivore.get(m));
+                for (int m = 0; m < animalsReadyToEat.size(); m++) {
+                    System.out.println(animalsReadyToEat.get(m));
                 }
                 //--------------------------//
-                for (int k = 0; k < animalsReadyToEat.size(); k++) {
+                for (int k = animalsReadyToEat.size() - 1; k >= 0 ; k--) {
                     animalReadyToEat = animalsReadyToEat.get(k);
                     if (animalReadyToEat.ate() == true){
-                        System.out.println(animalReadyToEat + "already ate");
+                        System.out.println(animalReadyToEat + " already ate");
                         continue;
                     }
 
                     if (animalReadyToEat instanceof Carnivore){
+                        candidatesToBeEatenByCarnivore = currentLocation.getAnimalsInLocation();
                         for (int l = candidatesToBeEatenByCarnivore.size() - 1; l >= 0; l--) {
                             Animal candidateToBeEaten = candidatesToBeEatenByCarnivore.get(l);
                             Class candidateToBeEatenClass = candidateToBeEaten.getClass();
@@ -271,14 +279,18 @@ public class Island {
                             //int randomProbability = generateProbability.getRandomNumber(0, 100);
                             int randomProbability = probabilityToBeEaten;
                             if (randomProbability <= probabilityToBeEaten) {
-                                animalReadyToEat.setAte(true);
-                                candidateToBeEaten.die(currentLocation);
+                                animalReadyToEat.setTriedToEat(true);
+                                animalReadyToEat.increaseFullness(candidateToBeEaten);
+                                this.actualizeAnimalsAmountInLocation(currentLocation, candidateToBeEaten, -1);
                                 System.out.println("\n" + animalReadyToEat + " ate " + candidateToBeEaten
                                         + " with probability = " + randomProbability);
+                                System.out.println("current fullness of " + animalReadyToEat + "=" + animalReadyToEat.currentFullness());
+                                candidateToBeEaten.die(currentLocation);
                                 break;
                             }
                         }
                     } else {
+                        candidatesToBeEatenByHerbivore = currentLocation.generateFoodListForHerbivore();
                         for (int l = candidatesToBeEatenByHerbivore.size() - 1; l >= 0; l--) {
                             Viable candidateToBeEaten = candidatesToBeEatenByHerbivore.get(l);
                             Class candidateToBeEatenClass = candidateToBeEaten.getClass();
@@ -290,8 +302,10 @@ public class Island {
                             //int randomProbability = generateProbability.getRandomNumber(0, 100);
                             int randomProbability = probabilityToBeEaten;
                             if (randomProbability <= probabilityToBeEaten) {
-                                animalReadyToEat.setAte(true);
+                                animalReadyToEat.setTriedToEat(true);
+                                animalReadyToEat.increaseFullness((Animal) candidateToBeEaten);
                                 if (candidateToBeEaten instanceof Animal){
+                                    this.actualizeAnimalsAmountInLocation(currentLocation, (Animal) candidateToBeEaten, -1);
                                     ((Animal) candidateToBeEaten).die(currentLocation);
                                 }
                                 if (candidateToBeEaten instanceof Plant){
@@ -300,6 +314,7 @@ public class Island {
 
                                 System.out.println("\n" + animalReadyToEat + " ate " + candidateToBeEaten
                                         + " with probability = " + randomProbability);
+                                System.out.println("current fullness of " + animalReadyToEat + "=" + animalReadyToEat.currentFullness());
                                 break;
                             }
                         }
@@ -311,8 +326,8 @@ public class Island {
                 //--------------------------//
                 System.out.println("current location(" + currentLocation.position.getI() + ","
                         + currentLocation.position.getJ() + ") after to eat:");
-                for (int m = 0; m < candidatesToBeEatenByCarnivore.size(); m++) {
-                    System.out.println(candidatesToBeEatenByCarnivore.get(m));
+                for (int m = 0; m < animalsReadyToEat.size(); m++) {
+                    System.out.println(animalsReadyToEat.get(m));
                 }
                 System.out.println("Left " + currentLocation.plantsInLocation.size() + " plants");
                 //--------------------------//

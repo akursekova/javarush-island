@@ -6,10 +6,6 @@ public class Plant implements Viable {
     public Plant() {
         this.emoji = "\uD83C\uDF31";
     }
-    @Override
-    public String toString() {
-        return emoji;
-    }
 
     public void eaten(Island.Location currentLocation){
         currentLocation.removePlant(this);

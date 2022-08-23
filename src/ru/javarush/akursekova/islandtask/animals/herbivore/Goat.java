@@ -11,7 +11,7 @@ public class Goat extends Herbivore {
         currentFullness = 10;
         emoji = "\uD83D\uDC10";
         moved = false;
-        ate = false;
+        triedToEat = false;
 
         foodAndProbability = new HashMap<>(){{
             put(Plant.class, 100);

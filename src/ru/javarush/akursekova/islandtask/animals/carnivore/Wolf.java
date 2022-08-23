@@ -1,10 +1,7 @@
 package ru.javarush.akursekova.islandtask.animals.carnivore;
-import ru.javarush.akursekova.islandtask.RandomNumberGenerator;
-import ru.javarush.akursekova.islandtask.animals.abstracts.Animal;
 import ru.javarush.akursekova.islandtask.animals.abstracts.Carnivore;
 import ru.javarush.akursekova.islandtask.animals.herbivore.*;
 
-import java.util.Date;
 import java.util.HashMap;
 public class Wolf extends Carnivore {
 
@@ -15,7 +12,7 @@ public class Wolf extends Carnivore {
         currentFullness = maxFullness;
         emoji = "\uD83D\uDC3A";
         moved = false;
-        ate = false;
+        triedToEat = false;
 
         foodAndProbability = new HashMap<>(){{
             put(Horse.class, 10);
