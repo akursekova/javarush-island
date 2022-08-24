@@ -20,7 +20,9 @@ public abstract class Animal implements Viable {
     public boolean moved() {
         return moved;
     }
-
+    public double weight() {
+        return weight;
+    }
     public void setMoved(boolean moved) {
         this.moved = moved;
     }
@@ -65,9 +67,9 @@ public abstract class Animal implements Viable {
         return directionsToMove;
     }
 
-    public void die(Island.Location currentLocation){
+    public void diedAnimalCleanUp(Island.Location currentLocation){
         currentLocation.removeAnimal(this);
-        System.out.println(this + " deleted from location");
+        System.out.println("\n" + this + " deleted from location");
     }
 
     public void reduceFullness(){
@@ -76,7 +78,7 @@ public abstract class Animal implements Viable {
         this.currentFullness = Double.parseDouble(String.valueOf(decimalFormat.format(this.currentFullness - amountToReduce)));
     }
 
-    public void increaseFullness(Animal eatenAnimal){
-        this.currentFullness += Math.min(eatenAnimal.weight, this.maxFullness - this.currentFullness);
+    public void increaseFullness(double weightEatenSpecie){
+        this.currentFullness += Math.min(weightEatenSpecie, this.maxFullness - this.currentFullness);
     }
 }

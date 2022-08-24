@@ -15,7 +15,7 @@ public class Island {
     private int width;
     private Location[][] locations;
 //    private int maxPlantsInLocations = 200;
-private int maxPlantsInLocations = 12;
+private int maxPlantsInLocations = 4;
     Map<Class, Integer> maxAnimalsInLocation = new HashMap<>() {{
         put(Bear.class, 5);
         //put(Bear.class, 2);
@@ -231,7 +231,7 @@ private int maxPlantsInLocations = 12;
                         }
                     }
                     currentAnimal.setMoved(true);
-                    currentAnimal.reduceFullness();
+                    //currentAnimal.reduceFullness();
                     System.out.println("current fullness of " + currentAnimal + "=" + currentAnimal.currentFullness());
                     currentLocation = this.getLocation(i, j);
                 }
@@ -240,6 +240,42 @@ private int maxPlantsInLocations = 12;
     }
 
 
+    public void becomeHungryAfterMovement(){
+        for (int i = 1; i < this.getWidth() - 1; i++) {
+            for (int j = 1; j < this.getLength() - 1; j++) {
+                Location currentLocation = this.getLocation(i, j);
+                List<Animal> animals = currentLocation.getAnimalsInLocation();
+                for (int k = 0; k < animals.size(); k++) {
+                    Animal currentAnimal = animals.get(k);
+                    currentAnimal.reduceFullness();
+                    //--------------------------//
+                    System.out.println(currentAnimal + " current fullness = " + currentAnimal.currentFullness());
+                    //--------------------------//
+                }
+            }
+        }
+    }
+
+
+    public void cleanUpIslandFromDiedAnimals(){
+        for (int i = 1; i < this.getWidth() - 1; i++) {
+            for (int j = 1; j < this.getLength() - 1; j++) {
+                Location currentLocation = this.getLocation(i, j);
+                List<Animal> animals = currentLocation.getAnimalsInLocation();
+                for (int k = 0; k < animals.size(); k++) {
+                    Animal currentAnimal = animals.get(k);
+                    if (currentAnimal.currentFullness() <= 0 &&
+                            !(currentAnimal.getClass().getSimpleName().equals("Caterpillar"))){
+                        this.actualizeAnimalsAmountInLocation(currentLocation, currentAnimal, -1);
+                        currentAnimal.diedAnimalCleanUp(currentLocation);
+                    }
+                    //--------------------------//
+                    System.out.println(currentAnimal + " died of hunger. Current fullness = " + currentAnimal.currentFullness());
+                    //--------------------------//
+                }
+            }
+        }
+    }
 
     public void feedAnimals() {
         Animal animalReadyToEat;
@@ -280,12 +316,13 @@ private int maxPlantsInLocations = 12;
                             int randomProbability = probabilityToBeEaten;
                             if (randomProbability <= probabilityToBeEaten) {
                                 animalReadyToEat.setTriedToEat(true);
-                                animalReadyToEat.increaseFullness(candidateToBeEaten);
+                                animalReadyToEat.increaseFullness(candidateToBeEaten.weight());
+                                //todo объединить actualizeAnimalsAmountInLocation и die в один метод?
                                 this.actualizeAnimalsAmountInLocation(currentLocation, candidateToBeEaten, -1);
                                 System.out.println("\n" + animalReadyToEat + " ate " + candidateToBeEaten
                                         + " with probability = " + randomProbability);
                                 System.out.println("current fullness of " + animalReadyToEat + "=" + animalReadyToEat.currentFullness());
-                                candidateToBeEaten.die(currentLocation);
+                                candidateToBeEaten.diedAnimalCleanUp(currentLocation);
                                 break;
                             }
                         }
@@ -303,13 +340,18 @@ private int maxPlantsInLocations = 12;
                             int randomProbability = probabilityToBeEaten;
                             if (randomProbability <= probabilityToBeEaten) {
                                 animalReadyToEat.setTriedToEat(true);
-                                animalReadyToEat.increaseFullness((Animal) candidateToBeEaten);
                                 if (candidateToBeEaten instanceof Animal){
+                                    Animal animalToBeEaten = (Animal) candidateToBeEaten;
+                                    double weightAnimalToBeEaten = animalToBeEaten.weight();
+                                    animalReadyToEat.increaseFullness(weightAnimalToBeEaten);
                                     this.actualizeAnimalsAmountInLocation(currentLocation, (Animal) candidateToBeEaten, -1);
-                                    ((Animal) candidateToBeEaten).die(currentLocation);
+                                    animalToBeEaten.diedAnimalCleanUp(currentLocation);
                                 }
                                 if (candidateToBeEaten instanceof Plant){
-                                    ((Plant) candidateToBeEaten).eaten(currentLocation);
+                                    Plant plantToBeEaten = (Plant) candidateToBeEaten;
+                                    double weightPlantToBeEaten = plantToBeEaten.weight();
+                                    animalReadyToEat.increaseFullness(weightPlantToBeEaten);
+                                    plantToBeEaten.eatenPlantCleanUp(currentLocation);
                                 }
 
                                 System.out.println("\n" + animalReadyToEat + " ate " + candidateToBeEaten

@@ -1,5 +1,6 @@
 package ru.javarush.akursekova.islandtask;
 import ru.javarush.akursekova.islandtask.animals.abstracts.Animal;
+import ru.javarush.akursekova.islandtask.animals.herbivore.Caterpillar;
 import ru.javarush.akursekova.islandtask.animals.plants.Plant;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class Main {
         IslandInitialization islandInitialization = new IslandInitialization();
         islandInitialization.fillCarnivoreAnimals(island);
         islandInitialization.fillHerbivoreAnimals(island);
-        //islandInitialization.fillPlants(island);
+        islandInitialization.fillPlants(island);
 
         ConsoleWriter consoleWriter = new ConsoleWriter();
         consoleWriter.getIslandView(island);
@@ -21,9 +22,10 @@ public class Main {
         consoleWriter.getIslandView(islandWithBorder);
 
         islandWithBorder.moveAnimals();
-//        System.out.println("animals in location " + islandWithBorder.getLocation(1, 1).getAnimalsInLocation().size());
+        islandWithBorder.becomeHungryAfterMovement();
+        islandWithBorder.cleanUpIslandFromDiedAnimals();
+        //        System.out.println("animals in location " + islandWithBorder.getLocation(1, 1).getAnimalsInLocation().size());
         islandWithBorder.feedAnimals();
-
-
+        //islandWithBorder.moveAnimals();
     }
 }

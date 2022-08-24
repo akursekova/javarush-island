@@ -3,12 +3,18 @@ import ru.javarush.akursekova.islandtask.Island;
 import ru.javarush.akursekova.islandtask.animals.Viable;
 public class Plant implements Viable {
     protected String emoji;
+    protected int weight;
+
     public Plant() {
         this.emoji = "\uD83C\uDF31";
+        this.weight = 1;
     }
-
-    public void eaten(Island.Location currentLocation){
+    public int weight() {
+        return weight;
+    }
+    public void eatenPlantCleanUp(Island.Location currentLocation){
         currentLocation.removePlant(this);
+        System.out.println(this.emoji + "removed from location");
     }
 
 }
