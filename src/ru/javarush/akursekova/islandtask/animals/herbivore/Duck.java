@@ -12,6 +12,7 @@ public class Duck extends Herbivore {
         emoji = "\uD83E\uDD86";
         moved = false;
         triedToEat = false;
+        fertile = true;
 
         foodAndProbability = new HashMap<>(){{
             put(Caterpillar.class, 90);

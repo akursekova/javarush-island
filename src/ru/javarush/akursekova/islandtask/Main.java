@@ -1,9 +1,9 @@
 package ru.javarush.akursekova.islandtask;
 import ru.javarush.akursekova.islandtask.animals.abstracts.Animal;
-import ru.javarush.akursekova.islandtask.animals.herbivore.Caterpillar;
-import ru.javarush.akursekova.islandtask.animals.plants.Plant;
+import ru.javarush.akursekova.islandtask.animals.carnivore.Wolf;
 
-import java.util.ArrayList;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 public class Main {
     public static void main(String[] args) {
@@ -22,10 +22,23 @@ public class Main {
         consoleWriter.getIslandView(islandWithBorder);
 
         islandWithBorder.moveAnimals();
-        islandWithBorder.becomeHungryAfterMovement();
-        islandWithBorder.cleanUpIslandFromDiedAnimals();
+//        islandWithBorder.becomeHungryAfterMovement();
+//        islandWithBorder.massCleanUpFromDiedAnimals();
         //        System.out.println("animals in location " + islandWithBorder.getLocation(1, 1).getAnimalsInLocation().size());
-        islandWithBorder.feedAnimals();
+        //islandWithBorder.feedAnimals();
         //islandWithBorder.moveAnimals();
+        for (int i = 1; i < islandWithBorder.getWidth() - 1; i++) {
+            for (int j = 1; j < islandWithBorder.getLength() - 1; j++) {
+                Island.Location currentLocation = islandWithBorder.getLocation(i, j);
+                System.out.println("location (" + currentLocation.getPosition().getI() + "," + currentLocation.getPosition().getJ() + "): ");
+                List<Animal> animals = currentLocation.getAnimalsInLocation();
+                for (int k = animals.size() - 1; k >= 0; k--) {
+                    Animal currentAnimal = animals.get(k);
+                    System.out.println(currentAnimal);
+                }
+            }
+        }
+
+        islandWithBorder.reproduceNewAnimal();
     }
 }

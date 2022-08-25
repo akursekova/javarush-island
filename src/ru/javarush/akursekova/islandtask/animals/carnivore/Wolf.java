@@ -13,6 +13,7 @@ public class Wolf extends Carnivore {
         emoji = "\uD83D\uDC3A";
         moved = false;
         triedToEat = false;
+        fertile = true;
 
         foodAndProbability = new HashMap<>(){{
             put(Horse.class, 10);
@@ -26,7 +27,5 @@ public class Wolf extends Carnivore {
             put(Duck.class, 40);
         }};
     }
-
-
 
 }

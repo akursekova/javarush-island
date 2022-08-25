@@ -14,14 +14,24 @@ public abstract class Animal implements Viable {
     protected String emoji;
     protected boolean moved;
     protected boolean triedToEat;
+    protected boolean fertile;
+    //todo убрать, не использую
     protected boolean died;
     protected Map<Class, Integer> foodAndProbability;
 
+
+    //todo проверит что у меня все нужные флаги у всех животных стоят в конструкторах
     public boolean moved() {
         return moved;
     }
     public double weight() {
         return weight;
+    }
+    public boolean fertile() {
+        return fertile;
+    }
+    public void setFertile(boolean fertile) {
+        this.fertile = fertile;
     }
     public void setMoved(boolean moved) {
         this.moved = moved;
@@ -67,6 +77,7 @@ public abstract class Animal implements Viable {
         return directionsToMove;
     }
 
+    //todo убрать из животного в Остров???
     public void diedAnimalCleanUp(Island.Location currentLocation){
         currentLocation.removeAnimal(this);
         System.out.println("\n" + this + " deleted from location");

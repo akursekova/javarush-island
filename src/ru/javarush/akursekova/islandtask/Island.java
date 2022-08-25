@@ -6,6 +6,8 @@ import ru.javarush.akursekova.islandtask.animals.carnivore.*;
 import ru.javarush.akursekova.islandtask.animals.herbivore.*;
 import ru.javarush.akursekova.islandtask.animals.plants.Plant;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +30,7 @@ private int maxPlantsInLocations = 4;
         //put(Wolf.class, 30);
         put(Wolf.class, 5);
         //put(Boar.class, 50);
-        put(Boar.class, 2);
+        put(Boar.class, 10);
         put(Buffalo.class, 10);
         //put(Buffalo.class, 2);
         //put(Caterpillar.class, 1000);
@@ -36,9 +38,9 @@ private int maxPlantsInLocations = 4;
         put(Deer.class, 20);
         //put(Deer.class, 2);
         //put(Duck.class, 200);
-        put(Duck.class, 2);
+        put(Duck.class, 4);
         //put(Goat.class, 140);
-        put(Goat.class, 3);
+        put(Goat.class, 10);
         put(Horse.class, 20);
         //put(Horse.class, 2);
         //put(Mouse.class, 500);
@@ -97,10 +99,12 @@ private int maxPlantsInLocations = 4;
     public int maxPlantsInLocations() {
         return maxPlantsInLocations;
     }
-    public boolean animalAmountExceedsLimit(Location locationToMove, Animal animal) {
-        int maxAnimalsByClassInLocation = this.maxAnimalsInLocation.get(animal.getClass());
+
+    //todo надо в качестве параметра передавать не животное а класс
+    public boolean animalAmountExceedsLimit(Location location, Class animalClass) {
+        int maxAnimalsByClassInLocation = this.maxAnimalsInLocation.get(animalClass);
         //System.out.println(maxAnimalsByTypeInLocation);
-        if (locationToMove.countAnimalsSameClass(animal.getClass()) + 1 > maxAnimalsByClassInLocation) {
+        if (location.countAnimalsSameClass(animalClass) + 1 > maxAnimalsByClassInLocation) {
             return true;
         } else {
             return false;
@@ -202,7 +206,7 @@ private int maxPlantsInLocations = 4;
                             jFuturePosition = futurePosition.getJ();
                             if (locationToMoveIsNotIslandBorder(directionsToMove[l], iCurrentPosition, jCurrentPosition)) {
                                 Location locationToMove = this.getLocation(iFuturePosition, jFuturePosition);
-                                if (animalAmountExceedsLimit(locationToMove, currentAnimal)) {
+                                if (animalAmountExceedsLimit(locationToMove, currentAnimal.getClass())) {
                                     System.out.println("Cannot move: max animals on Location (max = "
                                             + maxAnimalsInLocation.get(currentAnimal.getClass()) + "). " + currentAnimal.emoji()
                                             + " will stay on the same position: ("
@@ -256,8 +260,48 @@ private int maxPlantsInLocations = 4;
         }
     }
 
+    public void reproduceNewAnimal(){
+        for (int i = 1; i < this.getWidth() - 1; i++) {
+            for (int j = 1; j < this.getLength() - 1; j++) {
+                Location currentLocation = this.getLocation(i, j);
+                List<Animal> animals = currentLocation.getAnimalsInLocation();
+                System.out.println("location (" + currentLocation.getPosition().getI() + "," + currentLocation.getPosition().getJ() + "): ");
+                for (int k = 0; k < animals.size(); k++) {
+                    Animal currentAnimal = animals.get(k);
+                    if (currentAnimal.fertile()){
+                        System.out.println("current animal: " + currentAnimal);
+                        for (int l = 0; l < animals.size(); l++) {
+                            Animal possiblePartner = animals.get(l);
+                            if (!(currentAnimal.equals(possiblePartner))
+                                    && possiblePartner.getClass() == currentAnimal.getClass()
+                                    && !(this.animalAmountExceedsLimit(currentLocation, currentAnimal.getClass()))
+                                    && currentAnimal.fertile() == true && possiblePartner.fertile() == true){
+                                Animal babyAnimal;
+                                try {
+                                    Constructor<? extends Animal> constructor = currentAnimal.getClass().getConstructor();
+                                    babyAnimal = constructor.newInstance();
+                                    babyAnimal.setFertile(false);
+                                } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                System.out.println("new animal appeared " + babyAnimal + " in location ("
+                                        + currentLocation.position.getI() + ", " + currentLocation.position.getJ() + ").");
+                                currentLocation.addAnimal(babyAnimal);
+                                this.actualizeAnimalsAmountInLocation(currentLocation, babyAnimal, 1);
+                                currentAnimal.setFertile(false);
+                                possiblePartner.setFertile(false);
+                                break;
+                            } else {
+                                System.out.println("new baby next time");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-    public void cleanUpIslandFromDiedAnimals(){
+    public void massCleanUpFromDiedAnimals(){
         for (int i = 1; i < this.getWidth() - 1; i++) {
             for (int j = 1; j < this.getLength() - 1; j++) {
                 Location currentLocation = this.getLocation(i, j);
@@ -268,10 +312,10 @@ private int maxPlantsInLocations = 4;
                             !(currentAnimal.getClass().getSimpleName().equals("Caterpillar"))){
                         this.actualizeAnimalsAmountInLocation(currentLocation, currentAnimal, -1);
                         currentAnimal.diedAnimalCleanUp(currentLocation);
+                        //--------------------------//
+                        System.out.println(currentAnimal + " died of hunger. Current fullness = " + currentAnimal.currentFullness());
+                        //--------------------------//
                     }
-                    //--------------------------//
-                    System.out.println(currentAnimal + " died of hunger. Current fullness = " + currentAnimal.currentFullness());
-                    //--------------------------//
                 }
             }
         }
