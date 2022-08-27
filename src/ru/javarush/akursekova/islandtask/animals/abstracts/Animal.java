@@ -1,11 +1,12 @@
 package ru.javarush.akursekova.islandtask.animals.abstracts;
 import ru.javarush.akursekova.islandtask.Island;
-import ru.javarush.akursekova.islandtask.RandomNumberGenerator;
+import ru.javarush.akursekova.islandtask.service.RandomNumberGenerator;
 import ru.javarush.akursekova.islandtask.animals.Viable;
 
 import java.text.DecimalFormat;
 import java.util.Map;
 
+import static ru.javarush.akursekova.islandtask.Island.log;
 public abstract class Animal implements Viable {
     protected double weight;
     protected int speed;
@@ -37,7 +38,7 @@ public abstract class Animal implements Viable {
         this.moved = moved;
     }
 
-    public boolean ate() {
+    public boolean triedToEat() {
         return triedToEat;
     }
 
@@ -79,8 +80,9 @@ public abstract class Animal implements Viable {
 
     //todo убрать из животного в Остров???
     public void diedAnimalCleanUp(Island.Location currentLocation){
+        log.info("diedAnimalCleanUp started");
         currentLocation.removeAnimal(this);
-        System.out.println("\n" + this + " deleted from location");
+        log.debug("\n" + this + " deleted from location");
     }
 
     public void reduceFullness(){

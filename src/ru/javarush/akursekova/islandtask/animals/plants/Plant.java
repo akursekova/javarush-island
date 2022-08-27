@@ -1,6 +1,8 @@
 package ru.javarush.akursekova.islandtask.animals.plants;
 import ru.javarush.akursekova.islandtask.Island;
 import ru.javarush.akursekova.islandtask.animals.Viable;
+
+import static ru.javarush.akursekova.islandtask.Island.log;
 public class Plant implements Viable {
     protected String emoji;
     protected int weight;
@@ -13,8 +15,9 @@ public class Plant implements Viable {
         return weight;
     }
     public void eatenPlantCleanUp(Island.Location currentLocation){
+        log.info("eatenPlantCleanUp started");
         currentLocation.removePlant(this);
-        System.out.println(this.emoji + "removed from location");
+        log.debug(this.emoji + "removed from location");
     }
 
 }

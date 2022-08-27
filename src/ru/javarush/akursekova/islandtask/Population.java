@@ -1,8 +1,11 @@
 package ru.javarush.akursekova.islandtask;
+import ru.javarush.akursekova.islandtask.animals.abstracts.Animal;
 import ru.javarush.akursekova.islandtask.animals.carnivore.*;
 import ru.javarush.akursekova.islandtask.animals.herbivore.*;
+import ru.javarush.akursekova.islandtask.animals.plants.Plant;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 public class Population {
     // todo to decide if to use this class or just the Map from Island.class
@@ -35,4 +38,63 @@ public class Population {
         }
         return totalCountOfAnimalsOnLocation;
     }
+
+    //todo тестовый вариант. Возможно надо перенести в Games Settings
+
+    private static final Map<Class, Integer> wolfFoodAndProbability = new HashMap<>() {{
+        put(Horse.class, 10);
+        put(Deer.class, 15);
+        put(Rabbit.class, 60);
+        put(Mouse.class, 80);
+        put(Goat.class, 60);
+        put(Sheep.class, 70);
+        put(Boar.class, 15);
+        put(Buffalo.class, 10);
+        put(Duck.class, 40);
+    }};
+
+    private static final Map<Class, Integer> boarFoodAndProbability = new HashMap<>(){{
+        put(Mouse.class, 50);
+        put(Caterpillar.class, 90);
+        put(Plant.class, 100);
+    }};
+
+    private static final Map<Class, Integer> duckFoodAndProbability = new HashMap<>(){{
+        put(Caterpillar.class, 90);
+        put(Plant.class, 100);
+    }};
+
+    private static final Map<Class, Integer> caterpillarFoodAndProbability = new HashMap<>(){{
+        put(Plant.class, 100);
+    }};
+
+    private static final Map<Class, Map<Class, Integer>> FOOD_AND_PROBABILITY = new HashMap<>(){{
+        put(Wolf.class, wolfFoodAndProbability);
+        put(Boar.class, boarFoodAndProbability);
+        put(Duck.class, duckFoodAndProbability);
+        put(Caterpillar.class, caterpillarFoodAndProbability);
+    }};
+
+    public static Map<Class, Map<Class, Integer>> getFoodAndProbability(){
+        return FOOD_AND_PROBABILITY;
+    }
+
+    public static Integer getProbabilityByClass(Class readyToEat, Class toBeEaten){
+        Map<Class, Integer> foodAndProbabilityByClass = FOOD_AND_PROBABILITY.get(readyToEat);
+        int probability = foodAndProbabilityByClass.get(toBeEaten);
+        return probability;
+    }
+
+    public static boolean canBeEaten(Class readyToEat, Class toBeEaten){
+        Map<Class, Integer> foodAndProbabilityByClass = FOOD_AND_PROBABILITY.get(readyToEat);
+        boolean canBeEaten = foodAndProbabilityByClass.containsKey(toBeEaten);
+        return canBeEaten;
+    }
+
+
+
+
+
+
+
 }

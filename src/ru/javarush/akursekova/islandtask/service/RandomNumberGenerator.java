@@ -1,4 +1,4 @@
-package ru.javarush.akursekova.islandtask;
+package ru.javarush.akursekova.islandtask.service;
 import java.util.Random;
 public class RandomNumberGenerator {
     public int getRandomNumber(int min, int max){

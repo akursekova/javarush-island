@@ -1,16 +1,47 @@
-package ru.javarush.akursekova.islandtask;
+package ru.javarush.akursekova.islandtask.service;
+import ru.javarush.akursekova.islandtask.Island;
 import ru.javarush.akursekova.islandtask.animals.carnivore.*;
 import ru.javarush.akursekova.islandtask.animals.herbivore.*;
 import ru.javarush.akursekova.islandtask.animals.plants.Plant;
-public class IslandInitialization {
+import ru.javarush.akursekova.islandtask.counter.PopulationCounter;
+import ru.javarush.akursekova.islandtask.settings.GameSettings;
+public class AnimalsInitialization {
     RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
+    GameSettings gameSettings = new GameSettings();
+
+    int islandWidth = gameSettings.getIslandWidth();
+    int islandLength = gameSettings.getIslandLength();
+    int daysOnTheIsland = gameSettings.getDaysOnTheIsland();
+
+    public void initialize(Island island) {
+        System.out.println("Welcome to the 'ISLAND' game" + "\n");
+        System.out.println("You will observe island life during " + daysOnTheIsland + " days");
+        System.out.println("Your Island has size " + islandLength + " x " + islandWidth);
+        System.out.println("Starting fields initialization..." + "\n");
+        fillAllAnimals(island);
+        System.out.println("Fields are initialized.");
+    }
+
+    public void fillAllAnimals(Island island){
+        fillCarnivoreAnimals(island);
+        System.out.println("Carnivores have been created." + "\n");
+
+        fillHerbivoreAnimals(island);
+        System.out.println("Herbivores have been created." + "\n");
+
+        fillPlants(island);
+        System.out.println("Plants have been created." + "\n");
+    }
 
     public void fillCarnivoreAnimals(Island island){
+        System.out.println("Starting to create carnivores...");
         for (int i = 0; i < island.getWidth(); i++) {
             for (int j = 0; j < island.getLength(); j++) {
                 Island.Location currentLocation = island.getLocation(i, j);
 
-//                int bearAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Bear.class));
+
+//                int maxBearAmountInLocation = island.maxAnimalsInLocation.get(Bear.class);
+//                int bearAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxBearAmountInLocation);
 //                //int bearAmountInLocation = 1;
 //                //System.out.println("boarAmountInLocation" + boarAmountInLocation + "i,j=" + i + ", " + j);
 //                for (int k = 0; k < bearAmountInLocation; k++) {
@@ -19,7 +50,8 @@ public class IslandInitialization {
 //                }
 //                currentLocation.setAmountAnimalsInLocation(Bear.class, bearAmountInLocation);
 //
-//                int boaAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Boa.class));
+//                int maxBoaAmountInLocation = island.maxAnimalsInLocation.get(Boa.class);
+//                int boaAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxBoaAmountInLocation);
 //                //int boaAmountInLocation = 1;
 //                //System.out.println("boaAmountInLocation" + boaAmountInLocation + "i,j=" + i + ", " + j);
 //                for (int k = 0; k < boaAmountInLocation; k++) {
@@ -28,7 +60,8 @@ public class IslandInitialization {
 //                }
 //                currentLocation.setAmountAnimalsInLocation(Boa.class, boaAmountInLocation);
 //
-//                int eagleAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Eagle.class));
+//                int maxEagleAmountInLocation = island.maxAnimalsInLocation.get(Eagle.class);
+//                int eagleAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxEagleAmountInLocation);
 //                //int eagleAmountInLocation = 1;
 //                //System.out.println(eagleAmountInLocation);
 //                for (int k = 0; k < eagleAmountInLocation; k++) {
@@ -37,7 +70,8 @@ public class IslandInitialization {
 //                }
 //                currentLocation.setAmountAnimalsInLocation(Eagle.class, eagleAmountInLocation);
 //
-//                int foxAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Fox.class));
+//                int maxFoxAmountInLocation = island.maxAnimalsInLocation.get(Fox.class);
+//                int foxAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxFoxAmountInLocation);
 //                //int foxAmountInLocation =1;
 //                //System.out.println(foxAmountInLocation);
 //                for (int k = 0; k < foxAmountInLocation; k++) {
@@ -46,7 +80,8 @@ public class IslandInitialization {
 //                }
 //                currentLocation.setAmountAnimalsInLocation(Fox.class, foxAmountInLocation);
 
-                //int wolfAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Wolf.class));
+                int maxWolfAmountInLocation = island.maxAnimalsInLocation.get(Wolf.class);
+                //int wolfAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxWolfAmountInLocation);
                 int wolfAmountInLocation = 3;
                 //System.out.println("wolfAmountInLocation = " + wolfAmountInLocation + "i,j=" + i + ", " + j);
                 for (int k = 0; k < wolfAmountInLocation; k++) {
@@ -58,23 +93,24 @@ public class IslandInitialization {
         }
     }
 
-
-
     public void fillHerbivoreAnimals(Island island){
+        System.out.println("Starting to create herbivores...");
         for (int i = 0; i < island.getWidth(); i++) {
             for (int j = 0; j < island.getLength(); j++) {
 
                 Island.Location currentLocation = island.getLocation(i, j);
 
-                //int boarAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Boar.class));
-                int boarAmountInLocation =3;
+                int maxBoarAmountInLocation = island.maxAnimalsInLocation.get(Boar.class);
+                //int boarAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxBoarAmountInLocation);
+                int boarAmountInLocation = 3;
                 for (int k = 0; k < boarAmountInLocation; k++) {
                     currentLocation.addAnimal(new Boar());
                     PopulationCounter.getInstance().addHerbivore();
                 }
                 currentLocation.setAmountAnimalsInLocation(Boar.class, boarAmountInLocation);
 
-//                int buffaloAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Buffalo.class));
+//                int maxBuffaloAmountInLocation = island.maxAnimalsInLocation.get(Buffalo.class);
+//                int buffaloAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxBuffaloAmountInLocation);
 //                //int buffaloAmountInLocation =1;
 //                for (int k = 0; k < buffaloAmountInLocation; k++) {
 //                    currentLocation.addAnimal(new Buffalo());
@@ -82,15 +118,17 @@ public class IslandInitialization {
 //                }
 //                currentLocation.setAmountAnimalsInLocation(Buffalo.class, buffaloAmountInLocation);
 
-                //int caterpillarAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Caterpillar.class));
-//                int caterpillarAmountInLocation = 3;
-//                for (int k = 0; k < caterpillarAmountInLocation; k++) {
-//                    currentLocation.addAnimal(new Caterpillar());
-//                    PopulationCounter.getInstance().addHerbivore();
-//                }
-//                currentLocation.setAmountAnimalsInLocation(Caterpillar.class, caterpillarAmountInLocation);
+                int maxCaterpillarAmountInLocation = island.maxAnimalsInLocation.get(Caterpillar.class);
+                //int caterpillarAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxCaterpillarAmountInLocation);
+                int caterpillarAmountInLocation = 3;
+                for (int k = 0; k < caterpillarAmountInLocation; k++) {
+                    currentLocation.addAnimal(new Caterpillar());
+                    PopulationCounter.getInstance().addHerbivore();
+                }
+                currentLocation.setAmountAnimalsInLocation(Caterpillar.class, caterpillarAmountInLocation);
 
-//                int deerAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Deer.class));
+//                int maxDeerAmountInLocation = island.maxAnimalsInLocation.get(Deer.class);
+//                int deerAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxDeerAmountInLocation);
 //                //int deerAmountInLocation =1;
 //                for (int k = 0; k < deerAmountInLocation; k++) {
 //                    currentLocation.addAnimal(new Deer());
@@ -98,15 +136,17 @@ public class IslandInitialization {
 //                }
 //                currentLocation.setAmountAnimalsInLocation(Deer.class, deerAmountInLocation);
 
-                //int duckAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Duck.class));
-                int duckAmountInLocation =3;
+                int maxDuckAmountInLocation = island.maxAnimalsInLocation.get(Duck.class);
+                //int duckAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxDuckAmountInLocation);
+                int duckAmountInLocation = 3;
                 for (int k = 0; k < duckAmountInLocation; k++) {
                     currentLocation.addAnimal(new Duck());
                     PopulationCounter.getInstance().addHerbivore();
                 }
                 currentLocation.setAmountAnimalsInLocation(Duck.class, duckAmountInLocation);
 
-                //int goatAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Goat.class));
+//                int maxGoatAmountInLocation = island.maxAnimalsInLocation.get(Goat.class);
+//                int goatAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxGoatAmountInLocation);
 //                int goatAmountInLocation =3;
 //                for (int k = 0; k < goatAmountInLocation; k++) {
 //                    currentLocation.addAnimal(new Goat());
@@ -122,16 +162,18 @@ public class IslandInitialization {
 //                    PopulationCounter.getInstance().addHerbivore();
 //                }
 //                currentLocation.setAmountAnimalsInLocation(Horse.class, horseAmountInLocation);
-
-                //int mouseAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Mouse.class));
-//                int mouseAmountInLocation =1;
+//
+//                int maxMouseAmountInLocation = island.maxAnimalsInLocation.get(Mouse.class);
+//                int mouseAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxMouseAmountInLocation);
+//                //int mouseAmountInLocation =1;
 //                for (int k = 0; k < mouseAmountInLocation; k++) {
 //                    currentLocation.addAnimal(new Mouse());
 //                    PopulationCounter.getInstance().addHerbivore();
 //                }
 //                currentLocation.setAmountAnimalsInLocation(Mouse.class, mouseAmountInLocation);
-
-//                int rabbitAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Rabbit.class));
+//
+//                int maxRabbitAmountInLocation = island.maxAnimalsInLocation.get(Rabbit.class);
+//                int rabbitAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxRabbitAmountInLocation);
 //                //int rabbitAmountInLocation =1;
 //                for (int k = 0; k < rabbitAmountInLocation; k++) {
 //                    currentLocation.addAnimal(new Rabbit());
@@ -139,7 +181,8 @@ public class IslandInitialization {
 //                }
 //                currentLocation.setAmountAnimalsInLocation(Rabbit.class, rabbitAmountInLocation);
 //
-//                int sheepAmountInLocation = randomNumberGenerator.getRandomNumber(0, island.maxAnimalsInLocation.get(Sheep.class));
+//                int maxSheepAmountInLocation = island.maxAnimalsInLocation.get(Sheep.class);
+//                int sheepAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxSheepAmountInLocation);
 //                //int sheepAmountInLocation =1;
 //                        System.out.println("sheepAmountInLocation = " + sheepAmountInLocation + "i,j=" + i + ", " + j);
 //                for (int k = 0; k < sheepAmountInLocation; k++) {
@@ -152,15 +195,16 @@ public class IslandInitialization {
     }
 
     public void fillPlants(Island island){
+        System.out.println("Starting to create plants...");
         for (int i = 0; i < island.getWidth(); i++) {
             for (int j = 0; j < island.getLength(); j++) {
                 Island.Location currentLocation = island.getLocation(i, j);
                 for (int k = 0; k < island.maxPlantsInLocations(); k++) {
                     currentLocation.addPlant(new Plant());
+                    PopulationCounter.getInstance().addPlant();
                 }
             }
         }
-
     }
 }
 
