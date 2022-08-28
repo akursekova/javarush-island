@@ -1,8 +1,7 @@
 package ru.javarush.akursekova.islandtask.animals.herbivore;
-import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
-import ru.javarush.akursekova.islandtask.animals.plants.Plant;
 
-import java.util.HashMap;
+import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
+
 public class Goat extends Herbivore {
     public Goat() {
         weight = 60;
@@ -12,12 +11,7 @@ public class Goat extends Herbivore {
         emoji = "\uD83D\uDC10";
         moved = false;
         triedToEat = false;
-
-        foodAndProbability = new HashMap<>(){{
-            put(Plant.class, 100);
-        }};
-
-
+        fertile = true;
     }
 
 }

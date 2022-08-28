@@ -1,9 +1,10 @@
 package ru.javarush.akursekova.islandtask.counter;
+
 public class PopulationCounter {
 
     private static final PopulationCounter INSTANCE = new PopulationCounter();
 
-    public static PopulationCounter getInstance(){
+    public static PopulationCounter getInstance() {
         return INSTANCE;
     }
 
@@ -11,36 +12,43 @@ public class PopulationCounter {
     int herbivores = 0;
     int plants = 0;
 
-    public void addCarnivore(){
+    public void addCarnivore() {
         carnivores++;
     }
-    public void addHerbivore(){
+
+    public void addHerbivore() {
         herbivores++;
     }
-    public void addPlant(){
+
+    public void addPlant() {
         plants++;
     }
 
-    public void deleteCarnivore(){
+    public void deleteCarnivore() {
         carnivores--;
     }
-    public void deleteHerbivore(){
+
+    public void deleteHerbivore() {
         herbivores--;
     }
-    public void deletePlant(){
+
+    public void deletePlant() {
         plants--;
     }
 
-    public int getCarnivores(){
+    public int getCarnivores() {
         return carnivores;
     }
-    public int getHerbivores(){
+
+    public int getHerbivores() {
         return herbivores;
     }
-    public int getPlants(){
+
+    public int getPlants() {
         return plants;
     }
-    public int getTotalAnimals(){
+
+    public int getTotalAnimals() {
         return herbivores + carnivores;
     }
 }

@@ -1,31 +1,26 @@
 package ru.javarush.akursekova.islandtask;
+
 public class Position {
-    private int i;
-    private int j;
+    private int x;
+    private int y;
 
-    public Position(int i, int j) {
-        this.i = i;
-        this.j = j;
-    }
-    public int getI() {
-        return i;
-    }
-    public int getJ() {
-        return j;
+    public Position(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public void setI(int i) {
-        this.i = i;
+    public int getX() {
+        return x;
     }
 
-    public void setJ(int j) {
-        this.j = j;
+    public int getY() {
+        return y;
     }
 
     @Override
     public String toString() {
-        return "(" + i +
-                "," + j +
+        return "(" + x +
+                "," + y +
                 ')';
     }
 }

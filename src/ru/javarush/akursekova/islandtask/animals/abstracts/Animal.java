@@ -1,12 +1,13 @@
 package ru.javarush.akursekova.islandtask.animals.abstracts;
-import ru.javarush.akursekova.islandtask.Island;
+
+import ru.javarush.akursekova.islandtask.FoodAndProbabilityRules;
+import ru.javarush.akursekova.islandtask.animals.plants.Plant;
 import ru.javarush.akursekova.islandtask.service.RandomNumberGenerator;
 import ru.javarush.akursekova.islandtask.animals.Viable;
 
 import java.text.DecimalFormat;
 import java.util.Map;
 
-import static ru.javarush.akursekova.islandtask.Island.log;
 public abstract class Animal implements Viable {
     protected double weight;
     protected int speed;
@@ -18,22 +19,27 @@ public abstract class Animal implements Viable {
     protected boolean fertile;
     //todo убрать, не использую
     protected boolean died;
-    protected Map<Class, Integer> foodAndProbability;
+    //protected Map<Class, Integer> foodAndProbability;
 
+    FoodAndProbabilityRules foodAndProbabilityRules = new FoodAndProbabilityRules();
 
     //todo проверит что у меня все нужные флаги у всех животных стоят в конструкторах
     public boolean moved() {
         return moved;
     }
+
     public double weight() {
         return weight;
     }
+
     public boolean fertile() {
         return fertile;
     }
+
     public void setFertile(boolean fertile) {
         this.fertile = fertile;
     }
+
     public void setMoved(boolean moved) {
         this.moved = moved;
     }
@@ -53,6 +59,7 @@ public abstract class Animal implements Viable {
     public int speed() {
         return speed;
     }
+
     public double maxFullness() {
         return maxFullness;
     }
@@ -61,37 +68,47 @@ public abstract class Animal implements Viable {
         return currentFullness;
     }
 
-    public Map<Class, Integer> foodAndProbability() {
-        return foodAndProbability;
-    }
-
-    public int getProbabilityToBeEaten(Class clazz){
-        return foodAndProbability.get(clazz);
-    }
-
     public int[] generateDirectionsToMove() {
         int[] directionsToMove = new int[speed];
         for (int i = 0; i < directionsToMove.length; i++) {
             RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
-            directionsToMove[i] = randomNumberGenerator.getRandomNumber(1,4);
+            directionsToMove[i] = randomNumberGenerator.getRandomNumber(1, 4);
         }
         return directionsToMove;
     }
 
-    //todo убрать из животного в Остров???
-    public void diedAnimalCleanUp(Island.Location currentLocation){
-        log.info("diedAnimalCleanUp started");
-        currentLocation.removeAnimal(this);
-        log.debug("\n" + this + " deleted from location");
-    }
-
-    public void reduceFullness(){
-        double amountToReduce = maxFullness/4;
-        DecimalFormat decimalFormat = new DecimalFormat( "#.###" );
+    public void reduceFullness() {
+        double amountToReduce = maxFullness / 4;
+        DecimalFormat decimalFormat = new DecimalFormat("#.###");
         this.currentFullness = Double.parseDouble(String.valueOf(decimalFormat.format(this.currentFullness - amountToReduce)));
     }
 
-    public void increaseFullness(double weightEatenSpecie){
+    public void increaseFullness(Viable eatenSpecie) {
+        double weightEatenSpecie;
+        if (eatenSpecie instanceof Animal) {
+            Animal eatenAnimal = (Animal) eatenSpecie;
+            weightEatenSpecie = eatenAnimal.weight();
+        } else {
+            Plant eatenPlant = (Plant) eatenSpecie;
+            weightEatenSpecie = eatenPlant.weight();
+        }
         this.currentFullness += Math.min(weightEatenSpecie, this.maxFullness - this.currentFullness);
     }
+
+    //todo double check if it works
+    public boolean canEat(Viable toBeEaten) {
+        Map<Class, Integer> foodAndProbabilityByClass = foodAndProbabilityRules.getFoodAndProbability().get(this.getClass());
+        boolean canEat = foodAndProbabilityByClass.containsKey(toBeEaten.getClass());
+        return canEat;
+    }
+
+    public boolean meetCriteriaForReproducingChildrenWith(Animal possiblePartner) {
+        if (!(this.equals(possiblePartner)) && possiblePartner.getClass() == this.getClass()
+                && possiblePartner.fertile() == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

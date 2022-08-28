@@ -1,5 +1,7 @@
 package ru.javarush.akursekova.islandtask.animals.carnivore;
+
 import ru.javarush.akursekova.islandtask.animals.abstracts.Carnivore;
+
 public class Eagle extends Carnivore {
     public Eagle() {
         weight = 6;
@@ -9,6 +11,7 @@ public class Eagle extends Carnivore {
         emoji = "\uD83E\uDD85";
         moved = false;
         triedToEat = false;
+        fertile = true;
     }
 
 }

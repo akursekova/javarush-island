@@ -1,5 +1,7 @@
 package ru.javarush.akursekova.islandtask.animals.carnivore;
+
 import ru.javarush.akursekova.islandtask.animals.abstracts.Carnivore;
+
 public class Bear extends Carnivore {
     public Bear() {
         weight = 500;
@@ -8,5 +10,7 @@ public class Bear extends Carnivore {
         currentFullness = maxFullness;
         emoji = "\uD83D\uDC3B";
         moved = false;
+        triedToEat = false;
+        fertile = true;
     }
 }

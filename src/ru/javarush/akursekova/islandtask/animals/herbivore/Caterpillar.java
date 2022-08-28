@@ -1,8 +1,7 @@
 package ru.javarush.akursekova.islandtask.animals.herbivore;
-import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
-import ru.javarush.akursekova.islandtask.animals.plants.Plant;
 
-import java.util.HashMap;
+import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
+
 public class Caterpillar extends Herbivore {
     public Caterpillar() {
         weight = 0.01;
@@ -11,11 +10,8 @@ public class Caterpillar extends Herbivore {
         currentFullness = 0;
         emoji = "\uD83D\uDC1B";
         moved = false;
-
-        foodAndProbability = new HashMap<>(){{
-            put(Plant.class, 100);
-        }};
-
+        triedToEat = false;
+        fertile = true;
     }
 
 }

@@ -1,5 +1,7 @@
 package ru.javarush.akursekova.islandtask.animals.herbivore;
+
 import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
+
 public class Deer extends Herbivore {
     public Deer() {
         weight = 300;
@@ -8,6 +10,9 @@ public class Deer extends Herbivore {
         currentFullness = maxFullness;
         emoji = "\uD83E\uDD8C";
         moved = false;
+        triedToEat = false;
+        fertile = true;
+        ;
     }
 
 }

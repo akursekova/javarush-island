@@ -1,21 +1,27 @@
 package ru.javarush.akursekova.islandtask.service;
+
 import ru.javarush.akursekova.islandtask.Island;
-import ru.javarush.akursekova.islandtask.animals.abstracts.Carnivore;
-import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
-import ru.javarush.akursekova.islandtask.counter.PopulationCounter;
+import ru.javarush.akursekova.islandtask.animals.carnivore.Wolf;
+import ru.javarush.akursekova.islandtask.counter.StatisticsCounter;
 import ru.javarush.akursekova.islandtask.settings.GameSettings;
+
+import java.util.List;
+
 public class ProcessManager {
+
+
     GameSettings gameSettings = new GameSettings();
     AnimalsInitialization animalsInitialization = new AnimalsInitialization();
     ConsoleWriter consoleWriter = new ConsoleWriter();
+    StatisticsCounter statisticsCounter = new StatisticsCounter();
 
     int islandWidth = gameSettings.getIslandWidth();
     int islandLength = gameSettings.getIslandLength();
 
-    int carnivoresAmountOld, carnivoresAmountNew, herbivoresAmountOld, herbivoresAmountNew;
+    List<Integer> statsCollection;
 
 
-    public void run(){
+    public void run() {
         Island island = new Island(islandLength, islandWidth);
 
         animalsInitialization.initialize(island);
@@ -23,39 +29,38 @@ public class ProcessManager {
         Island islandWithBorder = island.buildBorderAroundIsland();
 
         consoleWriter.getIslandView(islandWithBorder);
-        consoleWriter.getIslandStatistics(islandWithBorder);
+        consoleWriter.getIslandStatistics();
 
-        islandWithBorder.moveAnimals();
-        islandWithBorder.becomeHungryAfterMovement();
+        for (int days = 1; days <= gameSettings.getDaysOnTheIsland(); days++) {
+            consoleWriter.dayStarted(days);
+            consoleWriter.animalsMove();
 
-        carnivoresAmountOld = PopulationCounter.getInstance().getCarnivores();
-        herbivoresAmountOld = PopulationCounter.getInstance().getHerbivores();
-        islandWithBorder.massCleanUpFromDiedAnimals();
-        carnivoresAmountNew = PopulationCounter.getInstance().getCarnivores();
-        herbivoresAmountNew = PopulationCounter.getInstance().getHerbivores();
-        consoleWriter.getDifferenceAnimalAmount(Carnivore.class, carnivoresAmountOld, carnivoresAmountNew);
-        consoleWriter.getDifferenceAnimalAmount(Herbivore.class, herbivoresAmountOld, herbivoresAmountNew);
+            islandWithBorder.moveAnimals();
 
-        islandWithBorder.feedAnimals();
-
-        carnivoresAmountOld = PopulationCounter.getInstance().getCarnivores();
-        herbivoresAmountOld = PopulationCounter.getInstance().getHerbivores();
-        islandWithBorder.reproduceNewAnimal();
-        carnivoresAmountNew = PopulationCounter.getInstance().getCarnivores();
-        herbivoresAmountNew = PopulationCounter.getInstance().getHerbivores();
-        consoleWriter.getDifferenceAnimalAmount(Carnivore.class, carnivoresAmountOld, carnivoresAmountNew);
-        consoleWriter.getDifferenceAnimalAmount(Herbivore.class, herbivoresAmountOld, herbivoresAmountNew);
-
-        islandWithBorder.resetFlags();
+            islandWithBorder.becomeHungryAfterMovement();
+            consoleWriter.animalsDied();
+            statsCollection = statisticsCounter.start();
+            islandWithBorder.massCleanUpFromDiedAnimals();
+            statisticsCounter.finish(statsCollection);
 
 
+            consoleWriter.animalsEat();
+            statsCollection = statisticsCounter.start();
+            islandWithBorder.feedAnimals();
+            statisticsCounter.finish(statsCollection);
+
+
+            consoleWriter.animalsReproduce();
+            statsCollection = statisticsCounter.start();
+            islandWithBorder.reproduceNewAnimal();
+            statisticsCounter.finish(statsCollection);
+
+            islandWithBorder.resetFlags();
+            islandWithBorder.recoverPlants();
+
+            consoleWriter.dayFinished(days);
+            consoleWriter.getIslandStatistics();
+            consoleWriter.getIslandView(islandWithBorder);
+        }
     }
-
-
-
-
-
-
-
-
 }

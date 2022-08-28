@@ -1,8 +1,7 @@
 package ru.javarush.akursekova.islandtask.animals.carnivore;
-import ru.javarush.akursekova.islandtask.animals.abstracts.Carnivore;
-import ru.javarush.akursekova.islandtask.animals.herbivore.*;
 
-import java.util.HashMap;
+import ru.javarush.akursekova.islandtask.animals.abstracts.Carnivore;
+
 public class Wolf extends Carnivore {
 
     public Wolf() {
@@ -14,18 +13,6 @@ public class Wolf extends Carnivore {
         moved = false;
         triedToEat = false;
         fertile = true;
-
-        foodAndProbability = new HashMap<>(){{
-            put(Horse.class, 10);
-            put(Deer.class, 15);
-            put(Rabbit.class, 60);
-            put(Mouse.class, 80);
-            put(Goat.class, 60);
-            put(Sheep.class, 70);
-            put(Boar.class, 15);
-            put(Buffalo.class, 10);
-            put(Duck.class, 40);
-        }};
     }
 
 }

@@ -1,8 +1,8 @@
 package ru.javarush.akursekova.islandtask.animals.herbivore;
-import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
-import ru.javarush.akursekova.islandtask.animals.plants.Plant;
 
-import java.util.HashMap;
+import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
+
+
 public class Duck extends Herbivore {
     public Duck() {
         weight = 1;
@@ -13,11 +13,6 @@ public class Duck extends Herbivore {
         moved = false;
         triedToEat = false;
         fertile = true;
-
-        foodAndProbability = new HashMap<>(){{
-            put(Caterpillar.class, 90);
-            put(Plant.class, 100);
-        }};
     }
 
 }
