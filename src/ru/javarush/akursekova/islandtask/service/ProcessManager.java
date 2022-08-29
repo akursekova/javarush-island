@@ -2,10 +2,13 @@ package ru.javarush.akursekova.islandtask.service;
 
 import ru.javarush.akursekova.islandtask.Island;
 import ru.javarush.akursekova.islandtask.animals.carnivore.Wolf;
+import ru.javarush.akursekova.islandtask.counter.PopulationCounter;
 import ru.javarush.akursekova.islandtask.counter.StatisticsCounter;
 import ru.javarush.akursekova.islandtask.settings.GameSettings;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ProcessManager {
 
@@ -22,6 +25,7 @@ public class ProcessManager {
 
 
     public void run() {
+
         Island island = new Island(islandLength, islandWidth);
 
         animalsInitialization.initialize(island);
@@ -32,7 +36,15 @@ public class ProcessManager {
         consoleWriter.getIslandStatistics();
 
         for (int days = 1; days <= gameSettings.getDaysOnTheIsland(); days++) {
+
             consoleWriter.dayStarted(days);
+
+            if (days != 1){
+                islandWithBorder.resetFlags();
+                consoleWriter.recoverPlants();
+                islandWithBorder.recoverPlants();
+            }
+
             consoleWriter.animalsMove();
 
             islandWithBorder.moveAnimals();
@@ -55,12 +67,11 @@ public class ProcessManager {
             islandWithBorder.reproduceNewAnimal();
             statisticsCounter.finish(statsCollection);
 
-            islandWithBorder.resetFlags();
-            islandWithBorder.recoverPlants();
 
-            consoleWriter.dayFinished(days);
             consoleWriter.getIslandStatistics();
             consoleWriter.getIslandView(islandWithBorder);
+
+            consoleWriter.dayFinished(days);
         }
     }
 }

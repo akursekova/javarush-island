@@ -1,7 +1,6 @@
 package ru.javarush.akursekova.islandtask.service;
 
 import ru.javarush.akursekova.islandtask.Island;
-import ru.javarush.akursekova.islandtask.FoodAndProbabilityRules;
 import ru.javarush.akursekova.islandtask.animals.abstracts.Carnivore;
 import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
 import ru.javarush.akursekova.islandtask.animals.plants.Plant;
@@ -30,6 +29,7 @@ public class ConsoleWriter {
     private static final String EAT = "Animals are going to eat..";
     private static final String DIED_OF_HUNGER = "Checking if there are animals died of hunger..";
     private static final String MOVE = "Animals are going to move..";
+    private static final String RECOVER_PLANTS = "Recovering plants for a new day..";
     private static final String DAY_STARTED = "DAY %d STARTED";
     private static final String DAY_FINISHED = "DAY %d FINISHED";
     private static final String INCREASED = "increased";
@@ -140,6 +140,10 @@ public class ConsoleWriter {
 
     public void animalsMove(){
         System.out.println(NEW_STRING + MOVE);
+    }
+
+    public void recoverPlants(){
+        System.out.println(NEW_STRING + RECOVER_PLANTS);
     }
 
     public void getSummaryAnimalsToBeCreated(Island island) {

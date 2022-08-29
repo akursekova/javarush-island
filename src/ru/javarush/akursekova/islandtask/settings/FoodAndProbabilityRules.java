@@ -1,4 +1,4 @@
-package ru.javarush.akursekova.islandtask;
+package ru.javarush.akursekova.islandtask.settings;
 
 import ru.javarush.akursekova.islandtask.animals.Viable;
 import ru.javarush.akursekova.islandtask.animals.abstracts.Animal;

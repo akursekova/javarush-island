@@ -1,6 +1,6 @@
 package ru.javarush.akursekova.islandtask.animals.abstracts;
 
-import ru.javarush.akursekova.islandtask.FoodAndProbabilityRules;
+import ru.javarush.akursekova.islandtask.settings.FoodAndProbabilityRules;
 import ru.javarush.akursekova.islandtask.animals.plants.Plant;
 import ru.javarush.akursekova.islandtask.service.RandomNumberGenerator;
 import ru.javarush.akursekova.islandtask.animals.Viable;
@@ -17,13 +17,9 @@ public abstract class Animal implements Viable {
     protected boolean moved;
     protected boolean triedToEat;
     protected boolean fertile;
-    //todo убрать, не использую
-    protected boolean died;
-    //protected Map<Class, Integer> foodAndProbability;
 
     FoodAndProbabilityRules foodAndProbabilityRules = new FoodAndProbabilityRules();
 
-    //todo проверит что у меня все нужные флаги у всех животных стоят в конструкторах
     public boolean moved() {
         return moved;
     }
@@ -36,16 +32,16 @@ public abstract class Animal implements Viable {
         return fertile;
     }
 
+    public boolean triedToEat() {
+        return triedToEat;
+    }
+
     public void setFertile(boolean fertile) {
         this.fertile = fertile;
     }
 
     public void setMoved(boolean moved) {
         this.moved = moved;
-    }
-
-    public boolean triedToEat() {
-        return triedToEat;
     }
 
     public void setTriedToEat(boolean triedToEat) {
@@ -95,7 +91,6 @@ public abstract class Animal implements Viable {
         this.currentFullness += Math.min(weightEatenSpecie, this.maxFullness - this.currentFullness);
     }
 
-    //todo double check if it works
     public boolean canEat(Viable toBeEaten) {
         Map<Class, Integer> foodAndProbabilityByClass = foodAndProbabilityRules.getFoodAndProbability().get(this.getClass());
         boolean canEat = foodAndProbabilityByClass.containsKey(toBeEaten.getClass());

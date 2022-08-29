@@ -49,7 +49,9 @@ public class AnimalsInitialization {
                 for (Map.Entry  entry : island.maxAnimalsInLocation.entrySet()) {
                     Class animalClass = (Class) entry.getKey();
                     int maxAnimalsInLocation = (int) entry.getValue();
-                    int randomAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxAnimalsInLocation);
+                    //todo revert back
+                    //int randomAmountInLocation = randomNumberGenerator.getRandomNumber(0, maxAnimalsInLocation);
+                    int randomAmountInLocation = 2;
                     currentLocation.setAmountAnimalsInLocation(animalClass, randomAmountInLocation);
                     for (int k = 0; k < randomAmountInLocation; k++) {
                         Animal newAnimal;
