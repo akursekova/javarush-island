@@ -6,14 +6,11 @@ import ru.javarush.akursekova.islandtask.animals.abstracts.Herbivore;
 import ru.javarush.akursekova.islandtask.animals.plants.Plant;
 import ru.javarush.akursekova.islandtask.counter.PopulationCounter;
 import ru.javarush.akursekova.islandtask.animals.abstracts.Animal;
-import ru.javarush.akursekova.islandtask.logging.Logger;
 
 import java.util.List;
 import java.util.Map;
 
 public class ConsoleWriter {
-    public static final Logger log = Logger.getInstance();
-
     private static final String CURRENT_ISLAND_STATE = "This is a current state of the Island: ";
     private static final String CURRENT_ISLAND_STATISTICS = "This is a current statistics of the Island: ";
     private static final String TOTAL_CARNIVORES_ISLAND = "Total amount of carnivores: ";
@@ -56,7 +53,7 @@ public class ConsoleWriter {
                 } else {
                     List<Animal> animalsInCurrentLocation = currentLocation.getAnimalsInLocation();
                     int totalAmountOfAnimalInLocation = animalsInCurrentLocation.size();
-                    if (totalAmountOfAnimalInLocation == 0){
+                    if (totalAmountOfAnimalInLocation == 0) {
                         System.out.print(OPEN_SQUARE_BRACKET + PLANT_EMOTE + CLOSE_SQUARE_BRACKET + SPACE);
                         continue;
                     }
@@ -118,36 +115,36 @@ public class ConsoleWriter {
         }
     }
 
-    public void dayStarted(int dayNumber){
+    public void dayStarted(int dayNumber) {
         System.out.println(NEW_STRING + String.format(DAY_STARTED, dayNumber));
     }
 
-    public void dayFinished(int dayNumber){
+    public void dayFinished(int dayNumber) {
         System.out.println(NEW_STRING + String.format(DAY_FINISHED, dayNumber));
     }
 
-    public void animalsEat(){
+    public void animalsEat() {
         System.out.println(NEW_STRING + EAT);
     }
 
-    public void animalsReproduce(){
+    public void animalsReproduce() {
         System.out.println(NEW_STRING + REPRODUCE);
     }
 
-    public void animalsDied(){
+    public void animalsDied() {
         System.out.println(NEW_STRING + DIED_OF_HUNGER);
     }
 
-    public void animalsMove(){
+    public void animalsMove() {
         System.out.println(NEW_STRING + MOVE);
     }
 
-    public void recoverPlants(){
+    public void recoverPlants() {
         System.out.println(NEW_STRING + RECOVER_PLANTS);
     }
 
     public void getSummaryAnimalsToBeCreated(Island island) {
-        for (Map.Entry  entry : island.maxAnimalsInLocation.entrySet()) {
+        for (Map.Entry entry : island.maxAnimalsInLocation.entrySet()) {
             Class animalClass = (Class) entry.getKey();
             int maxAnimalsInLocation = (int) entry.getValue();
             System.out.println(NEW_STRING + BAR + SPACE + animalClass.getSimpleName().toUpperCase() + SPACE + BAR);

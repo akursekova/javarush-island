@@ -1,14 +1,11 @@
 package ru.javarush.akursekova.islandtask.service;
 
 import ru.javarush.akursekova.islandtask.Island;
-import ru.javarush.akursekova.islandtask.animals.carnivore.Wolf;
-import ru.javarush.akursekova.islandtask.counter.PopulationCounter;
 import ru.javarush.akursekova.islandtask.counter.StatisticsCounter;
+import ru.javarush.akursekova.islandtask.exception.AnimalCreationException;
 import ru.javarush.akursekova.islandtask.settings.GameSettings;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ProcessManager {
 
@@ -39,7 +36,7 @@ public class ProcessManager {
 
             consoleWriter.dayStarted(days);
 
-            if (days != 1){
+            if (days != 1) {
                 islandWithBorder.resetFlags();
                 consoleWriter.recoverPlants();
                 islandWithBorder.recoverPlants();
@@ -64,7 +61,11 @@ public class ProcessManager {
 
             consoleWriter.animalsReproduce();
             statsCollection = statisticsCounter.start();
-            islandWithBorder.reproduceNewAnimal();
+            try {
+                islandWithBorder.reproduceNewAnimal();
+            } catch (AnimalCreationException e) {
+                System.err.println(e.getMessage());
+            }
             statisticsCounter.finish(statsCollection);
 
 

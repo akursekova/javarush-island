@@ -1,11 +1,8 @@
 package ru.javarush.akursekova.islandtask.counter;
 
-import ru.javarush.akursekova.islandtask.logging.Logger;
-
 public class PopulationCounter {
 
     private static final PopulationCounter INSTANCE = new PopulationCounter();
-    public static final Logger log = Logger.getInstance();
 
     public static PopulationCounter getInstance() {
         return INSTANCE;

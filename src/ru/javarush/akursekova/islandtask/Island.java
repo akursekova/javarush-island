@@ -8,6 +8,7 @@ import ru.javarush.akursekova.islandtask.animals.carnivore.*;
 import ru.javarush.akursekova.islandtask.animals.herbivore.*;
 import ru.javarush.akursekova.islandtask.animals.plants.Plant;
 import ru.javarush.akursekova.islandtask.counter.PopulationCounter;
+import ru.javarush.akursekova.islandtask.exception.AnimalCreationException;
 import ru.javarush.akursekova.islandtask.logging.Logger;
 import ru.javarush.akursekova.islandtask.service.RandomNumberGenerator;
 import ru.javarush.akursekova.islandtask.settings.FoodAndProbabilityRules;
@@ -18,6 +19,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class Island {
+    private static final String ERROR_ANIMAL_INIT = "Error during Animal initialization with class %s";
+
     private static final String LOG_ANIMAL_CANNOT_MOVE_LOC_LIMIT = "Cannot move: max animals on Location (max = %d). %s will stay on the same position: (%d, %d).";
     private static final String LOG_ANIMAL_CANNOT_MOVE_ISLAND_LIMIT = "Cannot move: limit of Island. %s will stay on the same position: (%d, %d).";
     private static final String LOG_ISLAND_CREATED = "Island with length = %d and width = %d successfully created.";
@@ -55,8 +58,8 @@ public class Island {
     private static final String AFTER = "after";
     private static final String LOG_EMPTY_STRING = "%s";
 
-
     public static final Logger log = Logger.getInstance();
+
     GameSettings gameSettings = new GameSettings();
     FoodAndProbabilityRules foodAndProbabilityRules = new FoodAndProbabilityRules();
     RandomNumberGenerator generateProbability = new RandomNumberGenerator();
@@ -173,9 +176,9 @@ public class Island {
                             if (!locationIsOnBorder(xFuturePosition, yFuturePosition, gameSettings.getIslandWithBorderWidth(), gameSettings.getIslandWithBorderLength())) {
                                 Location locationToMove = this.getLocation(xFuturePosition, yFuturePosition);
                                 if (animalAmountExceedsLimit(locationToMove, currentAnimal)) {
-                                log.debug(String.format(LOG_ANIMAL_CANNOT_MOVE_LOC_LIMIT,
-                                        maxAnimalsInLocation.get(currentAnimal.getClass()),
-                                        currentAnimal.emoji(), xCurrentPosition, yCurrentPosition));
+                                    log.debug(String.format(LOG_ANIMAL_CANNOT_MOVE_LOC_LIMIT,
+                                            maxAnimalsInLocation.get(currentAnimal.getClass()),
+                                            currentAnimal.emoji(), xCurrentPosition, yCurrentPosition));
                                 } else {
                                     locationToMove.addAnimal(currentAnimal);
                                     locationToMove.actualizeAnimalsAmountInLocation(currentAnimal, 1);
@@ -216,7 +219,7 @@ public class Island {
         log.info(String.format(LOG_METHOD_FINISHED, LOG_BECOME_HUNGRY));
     }
 
-    public void reproduceNewAnimal() {
+    public void reproduceNewAnimal() throws AnimalCreationException {
         log.info(String.format(LOG_METHOD_STARTED, LOG_REPRODUCE_ANIMAL));
         for (int i = 1; i < this.getWidth() - 1; i++) {
             for (int j = 1; j < this.getLength() - 1; j++) {
@@ -242,7 +245,7 @@ public class Island {
                                     babyAnimal.setFertile(false);
                                 } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
                                          IllegalAccessException e) {
-                                    throw new RuntimeException(e);
+                                    throw new AnimalCreationException(String.format(ERROR_ANIMAL_INIT, currentAnimal.getClass()));
                                 }
                                 log.debug(String.format(LOG_ANIMAL_REPRODUCED_ANIMAL, currentAnimal,
                                         possiblePartner, babyAnimal, currentLocation));
@@ -336,7 +339,7 @@ public class Island {
                     for (int l = candidatesToBeEaten.size() - 1; l >= 0; l--) {
                         Viable candidateToBeEaten = candidatesToBeEaten.get(l);
                         if (!animalReadyToEat.canEat(candidateToBeEaten)) {
-                            log.debug(String.format(LOG_ANIMAL_CANNOT_EAT,animalReadyToEat, candidateToBeEaten));
+                            log.debug(String.format(LOG_ANIMAL_CANNOT_EAT, animalReadyToEat, candidateToBeEaten));
                             continue;
                         }
                         probabilityToBeEaten = foodAndProbabilityRules.getProbabilityByClass(animalReadyToEat, candidateToBeEaten);

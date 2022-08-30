@@ -1,5 +1,7 @@
 package ru.javarush.akursekova.islandtask.logging;
 
+import ru.javarush.akursekova.islandtask.exception.LoggerInitializationException;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,7 +14,7 @@ public class Logger {
     private static final String OUTPUT_DIRECTORY = "logs";
     private static final String OUTPUT_FILENAME = "output.log";
     private static final String OUTPUT_FILEPATH = OUTPUT_DIRECTORY + SEPARATOR + OUTPUT_FILENAME;
-
+    private static final String ERROR_LOGGER_INIT = "Error during logger initialization";
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
@@ -27,13 +29,12 @@ public class Logger {
         outputFilePath = Path.of(OUTPUT_FILEPATH);
     }
 
-    public static Logger getInstance() {
+    public static Logger getInstance() throws LoggerInitializationException {
         if (INSTANCE == null) {
             try {
                 INSTANCE = new Logger();
             } catch (IOException ex) {
-                // todo возобновить в памяти что пишем в собственном exception
-                //throw new LoggerInitializationException("Error during logger initialization");
+                throw new LoggerInitializationException(ERROR_LOGGER_INIT);
             }
         }
         return INSTANCE;
