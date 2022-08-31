@@ -52,6 +52,7 @@ public class Island {
     private static final String LOG_RECOVER_PLANTS = "recoverPlants";
     private static final String LOG_REPRODUCE_ANIMAL = "reproduceNewAnimal";
     private static final String LOG_BECOME_HUNGRY = "becomeHungryAfterMovement";
+    private static final String LOG_DIED_SPECIE_CLEANUP = "diedSpecieCleanUp";
     private static final String LOG_MASS_CLEANUP = "massCleanUpFromDiedAnimals";
 
     private static final String BEFORE = "before";
@@ -166,7 +167,7 @@ public class Island {
                         log.debug(directionsToMove[l] + " ");
                     }
                     for (int l = 0; l < directionsToMove.length; l++) {
-                        if (currentAnimal.moved() == true) {
+                        if (currentAnimal.moved()) {
                             log.debug(String.format(LOG_CURRENT_ANIMAL, LOG_ALREADY_MOVED));
                             continue;
                         } else {
@@ -331,7 +332,7 @@ public class Island {
                 for (int k = animalsReadyToEat.size() - 1; k >= 0; k--) {
                     animalReadyToEat = animalsReadyToEat.get(k);
                     log.debug(String.format(LOG_ANIMAL_READY_TO_EAT, animalReadyToEat));
-                    if (animalReadyToEat.triedToEat() == true) {
+                    if (animalReadyToEat.triedToEat()) {
                         log.debug(String.format(LOG_ANIMAL_ALREADY_ATE, animalReadyToEat));
                         continue;
                     }
@@ -409,10 +410,6 @@ public class Island {
             plantsInLocation = new ArrayList<>();
         }
 
-        public Position getPosition() {
-            return position;
-        }
-
         public void setPosition(Position position) {
             this.position = position;
         }
@@ -442,7 +439,7 @@ public class Island {
         }
 
         public void diedSpecieCleanUp(Viable diedSpecie) {
-            //log.info("diedSpecieCleanUp started");
+            log.info(String.format(LOG_METHOD_STARTED, LOG_DIED_SPECIE_CLEANUP));
             if (diedSpecie instanceof Animal) {
                 Animal diedAnimal = (Animal) diedSpecie;
                 this.removeAnimal(diedAnimal);
@@ -472,8 +469,7 @@ public class Island {
         }
 
         public int amountAnimalsByClass(Class clazz) {
-            int animalsAmountByClass = this.animalsAmountByClass.get(clazz);
-            return animalsAmountByClass;
+            return this.animalsAmountByClass.get(clazz);
         }
 
         public List<Viable> generateFoodListFor(Animal animal) {

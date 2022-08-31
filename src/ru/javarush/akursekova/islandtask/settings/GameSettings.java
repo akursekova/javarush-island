@@ -1,9 +1,8 @@
 package ru.javarush.akursekova.islandtask.settings;
 
 public class GameSettings {
-    //todo TO CORRECT TO 100 x 20
-    private int ISLAND_WIDTH = 4;
-    private int ISLAND_LENGTH = 4;
+    private int ISLAND_WIDTH = 100;
+    private int ISLAND_LENGTH = 20;
     private int ISLAND_WITH_BORDER_WIDTH = ISLAND_WIDTH + 2;
     private int ISLAND_WITH_BORDER_LENGTH = ISLAND_LENGTH + 2;
     private int DAYS_ON_THE_ISLAND = 10;
